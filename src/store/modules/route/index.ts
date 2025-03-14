@@ -9,10 +9,10 @@ import { createStaticRoutes, getAuthVueRoutes } from '@/router/routes';
 import { ROOT_ROUTE } from '@/router/routes/builtin';
 import { getRouteName, getRoutePath } from '@/router/elegant/transform';
 import { fetchGetConstantRoutes, fetchGetUserRoutes, fetchIsRouteExist } from '@/service/api';
-import { useAuthStore } from '../auth';
+import { useUserStore } from '../auth';
 import { useTabStore } from '../tab';
 import {
-  filterAuthRoutesByRoles,
+  // filterAuthRoutesByRoles,
   getBreadcrumbsByRoute,
   getCacheRouteNames,
   getGlobalMenusByAuthRoutes,
@@ -24,7 +24,7 @@ import {
 } from './shared';
 
 export const useRouteStore = defineStore(SetupStoreId.Route, () => {
-  const authStore = useAuthStore();
+  const authStore = useUserStore();
   const tabStore = useTabStore();
   const { bool: isInitConstantRoute, setBool: setIsInitConstantRoute } = useBoolean();
   const { bool: isInitAuthRoute, setBool: setIsInitAuthRoute } = useBoolean();
@@ -175,10 +175,28 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
   }
 
   /** Init auth route */
+  // async function initAuthRoute() {
+  //   // check if user info is initialized
+  //   if (!authStore.userInfo || !authStore.userInfo.userName) {
+  //     await authStore.initUserInfo();
+  //   }
+  //
+  //   if (authRouteMode.value === 'static') {
+  //     initStaticAuthRoute();
+  //   } else {
+  //     await initDynamicAuthRoute();
+  //   }
+  //
+  //   tabStore.initHomeTab();
+  // }
+
   async function initAuthRoute() {
-    // check if user info is initialized
-    if (!authStore.userInfo.userId) {
-      await authStore.initUserInfo();
+    // 如果没有 token，可以视需求选择：重定向登录、或者直接 return
+    if (!authStore.token) {
+      // 这里可以根据业务需求做跳转
+      router.push({ name: 'login' });
+      // 或者直接 return，不初始化权限路由
+      return;
     }
 
     if (authRouteMode.value === 'static') {
@@ -189,21 +207,29 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
 
     tabStore.initHomeTab();
   }
-
   /** Init static auth route */
+  // function initStaticAuthRoute() {
+  //   const { authRoutes: staticAuthRoutes } = createStaticRoutes();
+  //
+  //   if (authStore.isStaticSuper) {
+  //     addAuthRoutes(staticAuthRoutes);
+  //   } else {
+  //     const filteredAuthRoutes = filterAuthRoutesByRoles(staticAuthRoutes, authStore.userInfo.roles);
+  //
+  //     addAuthRoutes(filteredAuthRoutes);
+  //   }
+  //
+  //   handleConstantAndAuthRoutes();
+  //
+  //   setIsInitAuthRoute(true);
+  // }
   function initStaticAuthRoute() {
     const { authRoutes: staticAuthRoutes } = createStaticRoutes();
 
-    if (authStore.isStaticSuper) {
-      addAuthRoutes(staticAuthRoutes);
-    } else {
-      const filteredAuthRoutes = filterAuthRoutesByRoles(staticAuthRoutes, authStore.userInfo.roles);
-
-      addAuthRoutes(filteredAuthRoutes);
-    }
+    // 不再区分 isStaticSuper，直接添加所有静态路由
+    addAuthRoutes(staticAuthRoutes);
 
     handleConstantAndAuthRoutes();
-
     setIsInitAuthRoute(true);
   }
 
@@ -318,6 +344,8 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
   }
 
   async function onRouteSwitchWhenLoggedIn() {
+    console.log('ceshi');
+    await authStore.initUserToken();
     await authStore.initUserInfo();
   }
 

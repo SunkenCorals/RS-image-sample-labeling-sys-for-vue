@@ -4,13 +4,13 @@ import { $t } from '@/locales';
 import { loginModuleRecord } from '@/constants/app';
 import { useRouterPush } from '@/hooks/common/router';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
-import { useAuthStore } from '@/store/modules/auth';
+import { useUserStore } from '@/store/modules/auth';
 
 defineOptions({
   name: 'PwdLogin'
 });
 
-const authStore = useAuthStore();
+const authStore = useUserStore();
 const { toggleLoginModule } = useRouterPush();
 const { formRef, validate } = useNaiveForm();
 
@@ -20,8 +20,8 @@ interface FormModel {
 }
 
 const model: FormModel = reactive({
-  userName: 'Soybean',
-  password: '123456'
+  userName: '',
+  password: ''
 });
 
 const rules = computed<Record<keyof FormModel, App.Global.FormRule[]>>(() => {
@@ -36,42 +36,44 @@ const rules = computed<Record<keyof FormModel, App.Global.FormRule[]>>(() => {
 
 async function handleSubmit() {
   await validate();
-  await authStore.login(model.userName, model.password);
+
+  await authStore.login({ userName: model.userName, userPassword: model.password }); // 确保传递的是对象，而不是两个参数
 }
 
-type AccountKey = 'super' | 'admin' | 'user';
+// type AccountKey = 'super' | 'admin' | 'user';
+//
+// interface Account {
+//   key: AccountKey;
+//   label: string;
+//   userName: string;
+//   password: string;
+// }
 
-interface Account {
-  key: AccountKey;
-  label: string;
-  userName: string;
-  password: string;
-}
+// const accounts = computed<Account[]>(() => [
+//   {
+//     key: 'super',
+//     label: $t('page.login.pwdLogin.superAdmin'),
+//     userName: 'Super',
+//     password: '123456'
+//   },
+//   {
+//     key: 'admin',
+//     label: $t('page.login.pwdLogin.admin'),
+//     userName: 'Admin',
+//     password: '123456'
+//   },
+//   {
+//     key: 'user',
+//     label: $t('page.login.pwdLogin.user'),
+//     userName: 'User',
+//     password: '123456'
+//   }
+// ]);
 
-const accounts = computed<Account[]>(() => [
-  {
-    key: 'super',
-    label: $t('page.login.pwdLogin.superAdmin'),
-    userName: 'Super',
-    password: '123456'
-  },
-  {
-    key: 'admin',
-    label: $t('page.login.pwdLogin.admin'),
-    userName: 'Admin',
-    password: '123456'
-  },
-  {
-    key: 'user',
-    label: $t('page.login.pwdLogin.user'),
-    userName: 'User',
-    password: '123456'
-  }
-]);
-
-async function handleAccountLogin(account: Account) {
-  await authStore.login(account.userName, account.password);
-}
+// async function handleAccountLogin(account: Account) {
+//   const loginRes = { userName: account.userName, userPassword: account.password }; // 传递对象
+//   await authStore.login(loginRes); // 只传一个参数
+// }
 </script>
 
 <template>
@@ -105,12 +107,12 @@ async function handleAccountLogin(account: Account) {
           {{ $t(loginModuleRecord.register) }}
         </NButton>
       </div>
-      <NDivider class="text-14px text-#666 !m-0">{{ $t('page.login.pwdLogin.otherAccountLogin') }}</NDivider>
-      <div class="flex-center gap-12px">
-        <NButton v-for="item in accounts" :key="item.key" type="primary" @click="handleAccountLogin(item)">
-          {{ item.label }}
-        </NButton>
-      </div>
+      <!--      <NDivider class="text-14px text-#666 !m-0">{{ $t('page.login.pwdLogin.otherAccountLogin') }}</NDivider>-->
+      <!--      <div class="flex-center gap-12px">-->
+      <!--        <NButton v-for="item in accounts" :key="item.key" type="primary" @click="handleAccountLogin(item)">-->
+      <!--          {{ item.label }}-->
+      <!--        </NButton>-->
+      <!--      </div>-->
     </NSpace>
   </NForm>
 </template>

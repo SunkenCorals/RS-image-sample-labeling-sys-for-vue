@@ -37,5 +37,11 @@ declare namespace StorageType {
       layout: UnionKey.ThemeLayoutMode;
       siderCollapse: boolean;
     };
+    userInfo: {
+      id: string;
+      userName: string;
+      roles: string[];
+      isAdmin: number;
+    } | null;
   }
 }

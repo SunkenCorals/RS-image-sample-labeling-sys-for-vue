@@ -1,6 +1,6 @@
 import type { AxiosResponse } from 'axios';
 import { BACKEND_ERROR_CODE, createFlatRequest, createRequest } from '@sa/axios';
-import { useAuthStore } from '@/store/modules/auth';
+import { useUserStore } from '@/store/modules/auth/index';
 import { $t } from '@/locales';
 import { localStg } from '@/utils/storage';
 import { getServiceBaseURL } from '@/utils/service';
@@ -20,8 +20,16 @@ export const request = createFlatRequest<App.Service.Response, RequestInstanceSt
   {
     async onRequest(config) {
       const Authorization = getAuthorization();
-      Object.assign(config.headers, { Authorization });
+      // Object.assign(config.headers, { Authorization });
 
+      // return config;
+      // const token = localStg.get('token'); // 从本地存储获取 token
+      if (Authorization) {
+        // ✅ 设置 token 作为 Cookie（核心修改）
+        document.cookie = `TOKEN=${Authorization}; path=/`;
+        // ✅ 也可以在 header 里加上 token（看后端是否需要）
+        config.headers.token = Authorization;
+      }
       return config;
     },
     isBackendSuccess(response) {
@@ -30,7 +38,7 @@ export const request = createFlatRequest<App.Service.Response, RequestInstanceSt
       return String(response.data.code) === import.meta.env.VITE_SERVICE_SUCCESS_CODE;
     },
     async onBackendFail(response, instance) {
-      const authStore = useAuthStore();
+      const authStore = useUserStore();
       const responseCode = String(response.data.code);
 
       function handleLogout() {

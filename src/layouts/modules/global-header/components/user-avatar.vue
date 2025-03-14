@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { VNode } from 'vue';
-import { useAuthStore } from '@/store/modules/auth';
+import { useUserStore } from '@/store/modules/auth';
 import { useRouterPush } from '@/hooks/common/router';
 import { useSvgIcon } from '@/hooks/common/icon';
 import { $t } from '@/locales';
@@ -10,7 +10,7 @@ defineOptions({
   name: 'UserAvatar'
 });
 
-const authStore = useAuthStore();
+const authStore = useUserStore();
 const { routerPushByKey, toLogin } = useRouterPush();
 const { SvgIconVNode } = useSvgIcon();
 
@@ -66,7 +66,7 @@ function handleDropdown(key: DropdownKey) {
 </script>
 
 <template>
-  <NButton v-if="!authStore.isLogin" quaternary @click="loginOrRegister">
+  <NButton v-if="!authStore.userInfo" quaternary @click="loginOrRegister">
     {{ $t('page.login.common.loginOrRegister') }}
   </NButton>
   <NDropdown v-else placement="bottom" trigger="click" :options="options" @select="handleDropdown">

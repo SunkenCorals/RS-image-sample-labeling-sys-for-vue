@@ -40,13 +40,24 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'datamanage',
+    path: '/datamanage',
+    component: 'layout.base$view.datamanage',
+    meta: {
+      title: 'datamanage',
+      i18nKey: 'route.datamanage',
+      icon: 'line-md:cloud-alt-tags',
+      order: 5
+    }
+  },
+  {
     name: 'home',
     path: '/home',
     component: 'layout.base$view.home',
     meta: {
       title: 'home',
       i18nKey: 'route.home',
-      icon: 'mdi:monitor-dashboard',
+      icon: 'line-md:compass',
       order: 1
     }
   },
@@ -73,6 +84,39 @@ export const generatedRoutes: GeneratedRoute[] = [
       i18nKey: 'route.login',
       constant: true,
       hideInMenu: true
+    }
+  },
+  {
+    name: 'markpage',
+    path: '/markpage',
+    component: 'layout.base$view.markpage',
+    meta: {
+      title: 'markpage',
+      i18nKey: 'route.markpage',
+      icon: 'line-md:monitor-screenshot',
+      order: 2
+    }
+  },
+  {
+    name: 'servicemanage',
+    path: '/servicemanage',
+    component: 'layout.base$view.servicemanage',
+    meta: {
+      title: 'servicemanage',
+      i18nKey: 'route.servicemanage',
+      icon: 'line-md:list',
+      order: 3
+    }
+  },
+  {
+    name: 'usermanage',
+    path: '/usermanage',
+    component: 'layout.base$view.usermanage',
+    meta: {
+      title: 'usermanage',
+      i18nKey: 'route.usermanage',
+      icon: 'line-md:account',
+      order: 4
     }
   }
 ];

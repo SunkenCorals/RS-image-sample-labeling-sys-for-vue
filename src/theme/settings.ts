@@ -4,7 +4,7 @@ export const themeSettings: App.Theme.ThemeSetting = {
   grayscale: false,
   colourWeakness: false,
   recommendColor: false,
-  themeColor: '#646cff',
+  themeColor: '#408ab7',
   otherColor: {
     info: '#2080f0',
     success: '#52c41a',
@@ -26,7 +26,7 @@ export const themeSettings: App.Theme.ThemeSetting = {
     height: 56,
     breadcrumb: {
       visible: true,
-      showIcon: true
+      showIcon: false
     },
     multilingual: {
       visible: true

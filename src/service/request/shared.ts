@@ -1,28 +1,22 @@
-import { useAuthStore } from '@/store/modules/auth';
+import { useUserStore } from '@/store/modules/auth/index';
 import { localStg } from '@/utils/storage';
-import { fetchRefreshToken } from '../api';
 import type { RequestInstanceState } from './type';
 
 export function getAuthorization() {
   const token = localStg.get('token');
-  const Authorization = token ? `Bearer ${token}` : null;
+  // const Authorization = token ? `Bearer ${token}` : null;
 
-  return Authorization;
+  return token;
 }
 
 /** refresh token */
 async function handleRefreshToken() {
-  const { resetStore } = useAuthStore();
+  const authStore = useUserStore();
 
-  const rToken = localStg.get('refreshToken') || '';
-  const { error, data } = await fetchRefreshToken(rToken);
-  if (!error) {
-    localStg.set('token', data.token);
-    localStg.set('refreshToken', data.refreshToken);
-    return true;
-  }
+  console.warn('⚠️ Token 过期，自动登出');
 
-  resetStore();
+  // 清除本地存储，强制用户重新登录
+  authStore.resetStore();
 
   return false;
 }

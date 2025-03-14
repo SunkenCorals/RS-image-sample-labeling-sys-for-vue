@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useFullscreen } from '@vueuse/core';
+// import { useFullscreen } from '@vueuse/core';
 import { useAppStore } from '@/store/modules/app';
 import { useThemeStore } from '@/store/modules/theme';
 import { GLOBAL_HEADER_MENU_ID } from '@/constants/app';
 import GlobalLogo from '../global-logo/index.vue';
 import GlobalBreadcrumb from '../global-breadcrumb/index.vue';
 import GlobalSearch from '../global-search/index.vue';
-import ThemeButton from './components/theme-button.vue';
+// import ThemeButton from './components/theme-button.vue';
 import UserAvatar from './components/user-avatar.vue';
 
 defineOptions({
@@ -26,7 +26,7 @@ defineProps<Props>();
 
 const appStore = useAppStore();
 const themeStore = useThemeStore();
-const { isFullscreen, toggle } = useFullscreen();
+// const { isFullscreen, toggle } = useFullscreen();
 </script>
 
 <template>
@@ -39,7 +39,7 @@ const { isFullscreen, toggle } = useFullscreen();
     </div>
     <div class="h-full flex-y-center justify-end">
       <GlobalSearch />
-      <FullScreen v-if="!appStore.isMobile" :full="isFullscreen" @click="toggle" />
+      <!--      <FullScreen v-if="!appStore.isMobile" :full="isFullscreen" @click="toggle" />-->
       <LangSwitch
         v-if="themeStore.header.multilingual.visible"
         :lang="appStore.locale"
@@ -51,7 +51,7 @@ const { isFullscreen, toggle } = useFullscreen();
         :is-dark="themeStore.darkMode"
         @switch="themeStore.toggleThemeScheme"
       />
-      <ThemeButton />
+      <!--      <ThemeButton />-->
       <UserAvatar />
     </div>
   </DarkModeContainer>
