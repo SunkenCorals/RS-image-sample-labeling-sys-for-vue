@@ -1,6 +1,6 @@
 <div align="center">
 	<img src="./public/favicon.svg" width="160" />
-	<h1>遥感样本标注前端（Vue重构）</h1>
+	<h1>遥感样本标注平台前端（Vue重构）</h1>
 </div>
 
 
