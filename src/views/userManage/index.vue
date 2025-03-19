@@ -60,8 +60,13 @@ onMounted(() => {
 });
 
 //  处理搜索
-const handleSearch = (params: { userid?: string; username?: string; isadmin: number }) => {
-  searchParams.value = params;
+// ✅ 处理搜索（修复 TypeScript 赋值错误）
+const handleSearch = (params: Partial<{ userid: string; username: string; isadmin: number }>) => {
+  searchParams.value = {
+    userid: params.userid ?? '', // 如果 undefined，则赋值为空字符串
+    username: params.username ?? '',
+    isadmin: params.isadmin ?? 1 // 默认 isadmin=1，避免 undefined
+  };
   fetchData();
 };
 
