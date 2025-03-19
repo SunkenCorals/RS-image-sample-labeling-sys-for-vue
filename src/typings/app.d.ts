@@ -488,6 +488,15 @@ declare namespace App {
           };
           creativity: string;
         };
+        userManage: {
+          common: {
+            userIdentity: string;
+          };
+          userIdentity: {
+            admin: string;
+            ordinaryUser: string;
+          };
+        };
       };
       form: {
         required: string;

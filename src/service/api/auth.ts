@@ -1,5 +1,12 @@
 import { request } from '../request';
 
+function parseResponse<T>(response: any): T {
+  if (response && response.response?.data) {
+    return response.response.data as T;
+  }
+  throw new Error('Invalid response format');
+}
+
 interface LoginParams {
   userName: string;
   userPassword: string;
@@ -106,34 +113,64 @@ export function fetchResetPassword(userId: number) {
 }
 
 /** 获取用户分页列表 */
-export function fetchUserList(params: {
-  userid?: number;
-  isAdmin?: number;
-  current?: number;
-  pageSize?: number;
-  username?: string;
-}) {
+// export function fetchUserList(params: {
+//   userid?: number;
+//   isAdmin?: number;
+//   current?: number;
+//   pageSize?: number;
+//   username?: string;
+// }) {
+//   return request({
+//     url: '/wegismarkapi/user/getUsers',
+//     method: 'GET',
+//     params
+//   });
+// }
+interface UserListResponse {
+  code: number;
+  message: string;
+  total: number;
+  success: boolean;
+  data: {
+    userid: number;
+    username: string;
+    userpassword: string;
+    isadmin: number;
+    finishednum: number | null;
+    unfinishednum: number | null;
+  }[];
+}
+export function fetchUserList(params: { current?: number; pageSize?: number; isAdmin?: number }) {
   return request({
     url: '/wegismarkapi/user/getUsers',
     method: 'GET',
     params
-  });
+  }).then(parseResponse<UserListResponse>);
 }
-
 /** 删除用户 */
-export function fetchDeleteUser(userId: number) {
+export function fetchDeleteUser(user_id: number) {
   return request({
-    url: `/wegismarkapi/user/deleteUser/${userId}`,
+    url: `/wegismarkapi/user/deleteUser/${user_id}`,
     method: 'DELETE'
   });
 }
 
-/** 获取所有角色 */
-export function fetchRoles() {
+/** 定义角色返回的接口 */
+interface RoleResponse {
+  code: number;
+  message: string;
+  data: {
+    id: number;
+    rolename: string;
+    rolecode: number;
+  }[];
+}
+/** 获取所有角色类型 */
+export function fetchRoles(): Promise<RoleResponse> {
   return request({
     url: '/wegismarkapi/user/getRoles',
     method: 'GET'
-  });
+  }).then(parseResponse<RoleResponse>); // ✅ 复用 `parseResponse<T>`
 }
 
 /** 更新用户信息 */

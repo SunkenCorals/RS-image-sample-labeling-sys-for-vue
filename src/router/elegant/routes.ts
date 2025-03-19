@@ -116,7 +116,7 @@ export const generatedRoutes: GeneratedRoute[] = [
       title: 'usermanage',
       i18nKey: 'route.usermanage',
       icon: 'line-md:account',
-      order: 4
+      order: 3
     }
   }
 ];

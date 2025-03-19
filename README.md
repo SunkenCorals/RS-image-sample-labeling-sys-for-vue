@@ -65,7 +65,7 @@ pnpm build
 4. 页面框架 ✅
 5. 首页
 6. 数据管理
-7. 用户管理
+7. 用户管理 ✅
 8. 任务管理
 9. 类别管理
 10. 标注页面
@@ -80,6 +80,8 @@ pnpm build
 2. 注册 fetchRegister ✅
 3. 登出 fetchLogout ✅
 4. 获取 fetchCurrentUser ✅
-5. 重置密码 fetchResetPassword
-6. ……
+5. 查找用户类别 fetchRoles ✅
+6. 按类别查询用户 fetchUserList ✅
+7. 重置密码 fetchResetPassword
+8. ……
 

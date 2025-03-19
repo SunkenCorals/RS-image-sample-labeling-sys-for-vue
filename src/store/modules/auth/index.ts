@@ -67,8 +67,8 @@ export const useUserStore = defineStore('user', {
           // 存储 Token & 用户信息
           localStg.set('token', data.token);
           // localStg.set('userInfo', data.userInfo);
-          console.log('✅ 登录成功', data.token);
-          // return { success: true, token: data.token };
+          console.log('✅ 登录成功 bj', data.token);
+          return { success: true, token: data.token };
         }
         throw new Error('登录失败，未返回 Token');
       } catch (error) {
@@ -141,19 +141,38 @@ export const useUserStore = defineStore('user', {
     },
 
     /** 获取用户列表 */
-    async getUserList(params: { current?: number; pageSize?: number }) {
+    // async getUserList(params: { current?: number; pageSize?: number }) {
+    //   try {
+    //     const { data } = await fetchUserList(params);
+    //     this.users = data?.data || [];
+    //   } catch (error) {
+    //     console.error('❌ 获取用户列表失败:', error);
+    //   }
+    // },
+    async getUserList(params: { current?: number; pageSize?: number; isAdmin?: number }) {
       try {
-        const { data } = await fetchUserList(params);
-        this.users = data?.data || [];
+        const response = await fetchUserList(params);
+        console.log('🚀 获取用户列表响应:', response);
+
+        if (response && Array.isArray(response.data)) {
+          this.users = response.data.length > 0 ? response.data : [];
+        } else {
+          console.warn('⚠️ 获取用户列表成功，但 data 为空');
+          this.users = [];
+        }
+
+        return response; // ✅ 返回完整的 response
       } catch (error) {
         console.error('❌ 获取用户列表失败:', error);
+        this.users = [];
+        return { total: 0, data: [] }; // ✅ 确保返回结构匹配
       }
     },
 
     /** 删除用户 */
-    async deleteUser(userId: number) {
+    async deleteUser(user_id: number) {
       try {
-        await fetchDeleteUser(userId);
+        await fetchDeleteUser(user_id);
         this.getUserList({});
       } catch (error) {
         console.error('❌ 删除用户失败:', error);
@@ -163,10 +182,21 @@ export const useUserStore = defineStore('user', {
     /** 获取所有角色 */
     async getRoles() {
       try {
-        const { data } = await fetchRoles();
-        this.roles = data || [];
+        const response = await fetchRoles();
+        console.log('🚀 获取角色列表响应:', response);
+
+        // ✅ 确保 role 变量类型正确
+        this.roles = response.data.map((role: { rolename: string; rolecode: number }) => ({
+          label: role.rolename, // ✅ 确保 `rolename` 正确
+          value: role.rolecode // ✅ 确保 `rolecode` 正确
+        }));
+
+        if (!this.roles.length) {
+          console.warn('⚠️ 获取角色成功，但角色列表为空');
+        }
       } catch (error) {
         console.error('❌ 获取角色失败:', error);
+        this.roles = [];
       }
     },
 

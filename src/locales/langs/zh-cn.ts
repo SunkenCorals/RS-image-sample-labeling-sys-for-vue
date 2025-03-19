@@ -243,6 +243,15 @@ const local: App.I18n.Schema = {
         desc5: 'Soybean 刚才把工作台页面随便写了一些，凑合能看了！'
       },
       creativity: '创意'
+    },
+    userManage: {
+      common: {
+        userIdentity: '用户身份'
+      },
+      userIdentity: {
+        admin: '管理员',
+        ordinaryUser: '普通用户'
+      }
     }
   },
   form: {

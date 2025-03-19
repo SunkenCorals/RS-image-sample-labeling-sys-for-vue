@@ -21,7 +21,12 @@ declare namespace Api {
     }
 
     /** common search params of table */
-    type CommonSearchParams = Pick<Common.PaginatingCommonParams, 'current' | 'size'>;
+    type CommonSearchParams = {
+      current?: number;
+      size?: number;
+      username?: string;
+      isAdmin?: number;
+    };
 
     /**
      * enable status
