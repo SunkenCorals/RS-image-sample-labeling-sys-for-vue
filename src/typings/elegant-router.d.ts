@@ -20,6 +20,7 @@ declare module "@elegant-router/types" {
     "403": "/403";
     "404": "/404";
     "500": "/500";
+    "categorymanage": "/categorymanage";
     "datamanage": "/datamanage";
     "home": "/home";
     "iframe-page": "/iframe-page/:url";
@@ -61,6 +62,7 @@ declare module "@elegant-router/types" {
     | "403"
     | "404"
     | "500"
+    | "categorymanage"
     | "datamanage"
     | "home"
     | "iframe-page"
@@ -89,6 +91,7 @@ declare module "@elegant-router/types" {
     | "500"
     | "iframe-page"
     | "login"
+    | "categorymanage"
     | "datamanage"
     | "home"
     | "markpage"

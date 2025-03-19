@@ -40,6 +40,17 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'categorymanage',
+    path: '/categorymanage',
+    component: 'layout.base$view.categorymanage',
+    meta: {
+      title: 'categorymanage',
+      i18nKey: 'route.categorymanage',
+      icon: 'line-md:clipboard-list',
+      order: 6
+    }
+  },
+  {
     name: 'datamanage',
     path: '/datamanage',
     component: 'layout.base$view.datamanage',
@@ -47,7 +58,7 @@ export const generatedRoutes: GeneratedRoute[] = [
       title: 'datamanage',
       i18nKey: 'route.datamanage',
       icon: 'line-md:cloud-alt-tags',
-      order: 5
+      order: 3
     }
   },
   {
@@ -116,7 +127,7 @@ export const generatedRoutes: GeneratedRoute[] = [
       title: 'usermanage',
       i18nKey: 'route.usermanage',
       icon: 'line-md:account',
-      order: 3
+      order: 4
     }
   }
 ];

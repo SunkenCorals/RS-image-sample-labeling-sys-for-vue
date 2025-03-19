@@ -5,35 +5,44 @@ import type { DataTableColumns } from 'naive-ui';
 import { useUserStore } from '@/store/modules/auth';
 import UserSearch from '@/views/userManage/modules/user-search.vue';
 
-// ✅ 获取用户 Store
+//  获取用户 Store
 const userStore = useUserStore();
 const message = useMessage();
 
-// ✅ 定义表格数据和加载状态
+//  定义表格数据和加载状态
 const tableData = ref<{ userid: number; username: string; isadmin: number }[]>([]);
 const total = ref(0);
 const loading = ref(false);
 const currentPage = ref(1);
 const pageSize = ref(10);
-// const isadmin = ref(1);
+
+// ✅ 默认 `isadmin` 必填，`userid` 和 `username` 可选
 const searchParams = ref({ userid: '', username: '', isadmin: 1 });
 
-// ✅ 获取用户数据
+//  获取用户数据
 const fetchData = async () => {
   loading.value = true;
+
+  // ✅ 组装请求参数，只带有值的字段
+  const params: Record<string, any> = {
+    isAdmin: searchParams.value.isadmin // `isadmin` 必须传递
+  };
+
+  if (searchParams.value.userid) params.userid = searchParams.value.userid;
+  if (searchParams.value.username) params.username = searchParams.value.username;
+
   try {
     const response = await userStore.getUserList({
       current: currentPage.value,
       pageSize: pageSize.value,
-      isAdmin: searchParams.value.isadmin // ✅ 改成动态绑定 `searchParams`
-      // ...searchParams.value // ✅ 绑定搜索条件
+      ...params // ✅ 只传递非空字段
     });
 
-    // ✅ 解析数据
+    // 解析数据
     if (response.data) {
       tableData.value = response.data || [];
       total.value = response.total || 0;
-      console.log('✅ 数据加载成功:', tableData.value);
+      message.success('数据加载成功');
     } else {
       message.error('获取用户列表失败');
     }
@@ -45,30 +54,30 @@ const fetchData = async () => {
   }
 };
 
-// ✅ 组件加载时获取数据
+//  组件加载时获取数据
 onMounted(() => {
   fetchData();
 });
 
-// ✅ 处理搜索
-const handleSearch = (params: { userid: string; username: string; isadmin: number }) => {
+//  处理搜索
+const handleSearch = (params: { userid?: string; username?: string; isadmin: number }) => {
   searchParams.value = params;
   fetchData();
 };
 
-// ✅ 处理重置
+//  处理重置
 const handleReset = () => {
   searchParams.value = { userid: '', username: '', isadmin: 1 };
   fetchData();
 };
 
-// ✅ 处理用户编辑
+//  处理用户编辑
 const editUser = (row: { userid: number; username: string; isadmin: number }) => {
   console.log('编辑用户:', row);
   message.info(`编辑用户: ${row.username}`);
 };
 
-// ✅ 处理用户删除
+//  处理用户删除
 const deleteUser = async (user_id: number) => {
   try {
     // 调用后端删除接口
@@ -86,7 +95,7 @@ const deleteUser = async (user_id: number) => {
   }
 };
 
-// ✅ 定义表格列
+//  定义表格列
 const columns: DataTableColumns<{ userid: number; username: string; isadmin: number }> = [
   { type: 'selection', align: 'center', width: 48 },
   { key: 'userid', title: '用户ID', align: 'center', width: 60 },
@@ -125,7 +134,7 @@ const columns: DataTableColumns<{ userid: number; username: string; isadmin: num
   }
 ];
 
-// ✅ 处理分页变化
+//  处理分页变化
 const handlePageChange = (page: number) => {
   currentPage.value = page;
   fetchData();
@@ -141,7 +150,7 @@ const handlePageChange = (page: number) => {
         <NButton type="primary" @click="fetchData">刷新数据</NButton>
       </template>
 
-      <!-- ✅ 让表格撑开页面，而不是自己滚动 -->
+      <!-- 让表格撑开页面，而不是自己滚动 -->
       <NDataTable
         :columns="columns"
         :data="tableData"

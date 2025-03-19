@@ -23,9 +23,13 @@ const handleSearch = () => {
   emit('search', searchParams.value);
 };
 
-// ✅ 触发重置
+// ✅ 触发重置（清空所有输入框）
 const handleReset = () => {
-  // searchParams.value = { userid: '', username: '', isadmin: 1 };
+  searchParams.value = {
+    userid: '',
+    username: '',
+    isadmin: undefined // 让下拉框也重置
+  };
   emit('reset', searchParams.value);
 };
 </script>
@@ -38,12 +42,12 @@ const handleReset = () => {
           <NGrid responsive="screen" item-responsive>
             <!-- 用户 ID -->
             <NFormItemGi span="24 s:12 m:6" label="用户 ID" class="pr-24px">
-              <NInput v-model:value="searchParams.userid" placeholder="请输入用户 ID" />
+              <NInput v-model:value="searchParams.userid" placeholder="请输入用户 ID" clearable />
             </NFormItemGi>
 
             <!-- 用户名 -->
             <NFormItemGi span="24 s:12 m:6" label="用户名" class="pr-24px">
-              <NInput v-model:value="searchParams.username" placeholder="请输入用户名" />
+              <NInput v-model:value="searchParams.username" placeholder="请输入用户名" clearable />
             </NFormItemGi>
 
             <!-- 用户类型 -->

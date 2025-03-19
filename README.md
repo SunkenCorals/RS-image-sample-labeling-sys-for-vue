@@ -51,37 +51,46 @@ pnpm build
 
 本系统的路由基于插件 [Elegant Router](https://github.com/soybeanjs/elegant-router)
 
-其他的慢慢写吧……
+## 开发日志
 
-## 开发进度
+### 3.19
 
-### 页面
+> hzh
 
-1. 登录页面 ✅
+- UI
 
-2. 注册页面 ✅
+  1. 用户管理
+  2. 导航栏新增类别管理
 
-3. 重置密码 ✅
-4. 页面框架 ✅
-5. 首页
-6. 数据管理
-7. 用户管理 ✅
-8. 任务管理
-9. 类别管理
-10. 标注页面
-11. 样本库页面
-12. ……
+- Function
 
-### 接口
+  1. 查询用户类别
 
-#### api/auth 用户管理
+  2. 查询用户并以表格形式渲染
 
-1. 登录 fetchLogin ✅
-2. 注册 fetchRegister ✅
-3. 登出 fetchLogout ✅
-4. 获取 fetchCurrentUser ✅
-5. 查找用户类别 fetchRoles ✅
-6. 按类别查询用户 fetchUserList ✅
-7. 重置密码 fetchResetPassword
-8. ……
+     userID和userName非必选，isAdmin必选
+
+  3. 删除用户未实现
+     后端存在userid和user_id弄混淆的bug
+
+  4. 编辑用户-修改类别未实现
+
+### 3.15
+
+> hzh
+
+- UI
+  1. 登录
+  2. 注册
+  3. 修改密码
+- Function
+  1. 登录/登出
+  2. 注册
+  3. 获取当前用户信息存储loaclstorage，页面加载渲染userinfo，路由加载token放行（不同用户token权限未配置）
+
+### 3.13 
+
+> hzh
+
+1. 完成基本框架搭建
 

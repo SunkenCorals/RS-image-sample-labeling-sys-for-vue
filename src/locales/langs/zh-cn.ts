@@ -166,7 +166,8 @@ const local: App.I18n.Schema = {
     datamanage: '数据管理',
     servicemanage: '服务管理',
     usermanage: '用户管理',
-    markpage: '标注页面'
+    markpage: '标注页面',
+    categorymanage: '类别管理'
   },
   page: {
     login: {
