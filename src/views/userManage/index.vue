@@ -16,14 +16,14 @@ const loading = ref(false);
 const currentPage = ref(1);
 const pageSize = ref(10);
 
-// ✅ 默认 `isadmin` 必填，`userid` 和 `username` 可选
+// 默认 `isadmin` 必填，`userid` 和 `username` 可选
 const searchParams = ref({ userid: '', username: '', isadmin: 1 });
 
 //  获取用户数据
 const fetchData = async () => {
   loading.value = true;
 
-  // ✅ 组装请求参数，只带有值的字段
+  // 组装请求参数，只带有值的字段
   const params: Record<string, any> = {
     isAdmin: searchParams.value.isadmin // `isadmin` 必须传递
   };
@@ -60,7 +60,6 @@ onMounted(() => {
 });
 
 //  处理搜索
-// ✅ 处理搜索（修复 TypeScript 赋值错误）
 const handleSearch = (params: Partial<{ userid: string; username: string; isadmin: number }>) => {
   searchParams.value = {
     userid: params.userid ?? '', // 如果 undefined，则赋值为空字符串

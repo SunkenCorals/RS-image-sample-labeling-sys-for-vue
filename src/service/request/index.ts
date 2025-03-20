@@ -6,6 +6,7 @@ import { getServiceBaseURL } from '@/utils/service';
 import { $t } from '@/locales';
 import { getAuthorization, handleExpiredRequest, showErrorMsg } from './shared';
 import type { RequestInstanceState } from './type';
+// import { log } from 'console';
 
 const isHttpProxy = import.meta.env.DEV && import.meta.env.VITE_HTTP_PROXY === 'Y';
 const { baseURL, otherBaseURL } = getServiceBaseURL(import.meta.env, isHttpProxy);
@@ -33,9 +34,15 @@ export const request = createFlatRequest<App.Service.Response, RequestInstanceSt
       return config;
     },
     isBackendSuccess(response) {
-      // when the backend response code is "0000"(default), it means the request is success
-      // to change this logic by yourself, you can modify the `VITE_SERVICE_SUCCESS_CODE` in `.env` file
-      return String(response.data.code) === import.meta.env.VITE_SERVICE_SUCCESS_CODE;
+      // 如果响应中有 code 字段，检查是否为 200
+      if ('code' in response.data) {
+        return Number(response.data.code) === 200;
+      }
+      // 如果响应中没有 code 字段，但有 currentUser，也认为是成功的
+      if ('currentUser' in response.data) {
+        return true;
+      }
+      return false;
     },
     async onBackendFail(response, instance) {
       const authStore = useUserStore();

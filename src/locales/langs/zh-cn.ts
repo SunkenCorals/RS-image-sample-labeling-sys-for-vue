@@ -164,7 +164,7 @@ const local: App.I18n.Schema = {
     'iframe-page': '外链页面',
     home: '首页',
     datamanage: '数据管理',
-    servicemanage: '服务管理',
+    servicemanage: '任务管理',
     usermanage: '用户管理',
     markpage: '标注页面',
     categorymanage: '类别管理'
