@@ -34,14 +34,41 @@ export const request = createFlatRequest<App.Service.Response, RequestInstanceSt
       return config;
     },
     isBackendSuccess(response) {
-      // 如果响应中有 code 字段，检查是否为 200
-      if ('code' in response.data) {
-        return Number(response.data.code) === 200;
+      // 如果响应中没有 data，直接返回 false
+      if (!response.data) {
+        return false;
       }
-      // 如果响应中没有 code 字段，但有 currentUser，也认为是成功的
-      if ('currentUser' in response.data) {
+
+      // 添加类型断言
+      const data = response.data as Record<string, any>;
+
+      // 检查 code 字段
+      if ('code' in data) {
+        // 如果是数字，检查是否为 200
+        if (typeof data.code === 'number') {
+          return data.code === 200;
+        }
+        // 如果是字符串，检查是否为 "SUCCESS" 或 "200"
+        if (typeof data.code === 'string') {
+          return data.code === 'SUCCESS' || data.code === '200';
+        }
+      }
+
+      // 检查 success 字段
+      if ('success' in data && typeof data.success === 'boolean') {
+        return data.success === true;
+      }
+
+      // 检查 data 字段中是否包含 token（登录接口的特殊情况）
+      if (data.data && typeof data.data === 'object' && 'token' in data.data) {
         return true;
       }
+
+      // 检查 data 字段
+      if ('data' in data) {
+        return true;
+      }
+
       return false;
     },
     async onBackendFail(response, instance) {
