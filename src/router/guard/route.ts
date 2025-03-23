@@ -7,10 +7,10 @@ import type {
   Router
 } from 'vue-router';
 import type { RouteKey, RoutePath } from '@elegant-router/types';
-import { getRouteName } from '@/router/elegant/transform';
 import { useRouteStore } from '@/store/modules/route';
-import { localStg } from '@/utils/storage';
 import { useUserStore } from '@/store/modules/auth';
+import { localStg } from '@/utils/storage';
+import { getRouteName } from '@/router/elegant/transform';
 
 /**
  * 创建路由守卫

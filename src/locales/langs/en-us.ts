@@ -1,9 +1,9 @@
 const local: App.I18n.Schema = {
   system: {
-    title: 'RSLNet AI System',
-    updateTitle: 'System Version Update Notification',
-    updateContent: 'A new version of the system has been detected. Do you want to refresh the page immediately?',
-    updateConfirm: 'Refresh immediately',
+    title: 'RSLabel AI System',
+    updateTitle: 'System Update Notification',
+    updateContent: 'A new version is available. Would you like to refresh the page now?',
+    updateConfirm: 'Refresh Now',
     updateCancel: 'Later'
   },
   common: {
@@ -245,13 +245,59 @@ const local: App.I18n.Schema = {
       },
       creativity: 'Creativity'
     },
-    userManage: {
+    usermanage: {
       common: {
-        userIdentity: 'userIdentity'
+        userIdentity: 'User Identity',
+        username: 'Username',
+        password: 'Password',
+        isAdmin: 'Administrator',
+        finishedNum: 'Finished Tasks',
+        unfinishedNum: 'Unfinished Tasks',
+        createUser: 'Create User',
+        editUser: 'Edit User',
+        deleteUser: 'Delete User',
+        resetPassword: 'Reset Password',
+        confirmDelete: 'Are you sure to delete this user?',
+        confirmReset: "Are you sure to reset this user's password?",
+        searchPlaceholder: 'Please enter ',
+        success: 'Operation Successful',
+        fail: 'Operation Failed',
+        error: 'Load Failed'
       },
       userIdentity: {
-        admin: 'admin',
-        ordinaryUser: 'ordinaryUser'
+        admin: 'Administrator',
+        ordinaryUser: 'Regular User'
+      }
+    },
+    datamanage: {
+      common: {
+        root: 'Root',
+        search: 'Search files...',
+        new: 'New',
+        newFile: 'New File',
+        newFolder: 'New Folder',
+        download: 'Download',
+        rename: 'Rename',
+        viewInfo: 'View Info',
+        delete: 'Delete',
+        lastModified: 'Last Modified',
+        size: 'Size',
+        folder: 'Folder',
+        file: 'File',
+        unknown: 'Unknown Operation'
+      },
+      folders: {
+        remoteSensing: 'Remote Sensing Data',
+        year2024: '2024 Data',
+        year2023: '2023 Data',
+        beijing: 'Beijing Area Images',
+        shanghai: 'Shanghai Area Images',
+        history: 'Historical Images',
+        annotation: 'Annotation Results',
+        building: 'Building Annotations',
+        road: 'Road Annotations',
+        results: 'Processing Results',
+        buildingExtraction: 'Building Extraction'
       }
     }
   },

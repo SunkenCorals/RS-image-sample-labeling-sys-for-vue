@@ -2,6 +2,7 @@
 import { computed, h, ref } from 'vue';
 import { NBreadcrumb, NBreadcrumbItem, NButton, NCard, NDropdown, NIcon, NInput, NSpace } from 'naive-ui';
 import { Icon } from '@iconify/vue';
+import { $t } from '@/locales';
 
 // 模拟 MinIO 数据结构
 interface FileItem {
@@ -39,36 +40,71 @@ const mockData: FileItem[] = [
             children: [
               {
                 id: '1-1-1-1',
-                name: 'beijing_2024_01.tif',
-                type: 'file',
-                size: '2.5GB',
-                path: '/遥感影像数据/2024年数据/北京地区影像/beijing_2024_01.tif',
-                lastModified: '2024-03-17'
+                name: '北京地区影像',
+                type: 'folder',
+                path: '/遥感影像数据/2024年数据/北京地区影像/北京地区影像',
+                lastModified: '2024-03-18',
+                children: [
+                  {
+                    id: '1-1-1-1-1',
+                    name: 'beijing_2024_01.tif',
+                    type: 'file',
+                    size: '2.5GB',
+                    path: '/遥感影像数据/2024年数据/北京地区影像/北京地区影像/beijing_2024_01.tif',
+                    lastModified: '2024-03-17'
+                  },
+                  {
+                    id: '1-1-1-1-2',
+                    name: 'beijing_2024_02.tif',
+                    type: 'file',
+                    size: '2.8GB',
+                    path: '/遥感影像数据/2024年数据/北京地区影像/北京地区影像/beijing_2024_02.tif',
+                    lastModified: '2024-03-16'
+                  }
+                ]
               },
               {
-                id: '1-1-1-2',
-                name: 'beijing_2024_02.tif',
-                type: 'file',
-                size: '2.8GB',
-                path: '/遥感影像数据/2024年数据/北京地区影像/beijing_2024_02.tif',
-                lastModified: '2024-03-16'
+                id: '1-1-2',
+                name: '上海地区影像',
+                type: 'folder',
+                path: '/遥感影像数据/2024年数据/上海地区影像',
+                lastModified: '2024-03-18',
+                children: [
+                  {
+                    id: '1-1-2-1',
+                    name: 'shanghai_2024_01.tif',
+                    type: 'file',
+                    size: '2.3GB',
+                    path: '/遥感影像数据/2024年数据/上海地区影像/shanghai_2024_01.tif',
+                    lastModified: '2024-03-17'
+                  }
+                ]
               }
             ]
           },
           {
-            id: '1-1-2',
-            name: '上海地区影像',
+            id: '1-2',
+            name: '2023年数据',
             type: 'folder',
-            path: '/遥感影像数据/2024年数据/上海地区影像',
-            lastModified: '2024-03-18',
+            path: '/遥感影像数据/2023年数据',
+            lastModified: '2024-03-19',
             children: [
               {
-                id: '1-1-2-1',
-                name: 'shanghai_2024_01.tif',
-                type: 'file',
-                size: '2.3GB',
-                path: '/遥感影像数据/2024年数据/上海地区影像/shanghai_2024_01.tif',
-                lastModified: '2024-03-17'
+                id: '1-2-1',
+                name: '历史影像',
+                type: 'folder',
+                path: '/遥感影像数据/2023年数据/历史影像',
+                lastModified: '2024-03-18',
+                children: [
+                  {
+                    id: '1-2-1-1',
+                    name: 'beijing_2023_12.tif',
+                    type: 'file',
+                    size: '2.4GB',
+                    path: '/遥感影像数据/2023年数据/历史影像/beijing_2023_12.tif',
+                    lastModified: '2023-12-31'
+                  }
+                ]
               }
             ]
           }
@@ -212,7 +248,7 @@ const currentItems = computed(() => {
 const pathItems = computed(() => {
   const paths = currentPath.value.split('/').filter(Boolean);
   return [
-    { name: '根目录', path: '/' },
+    { name: $t('page.datamanage.common.root'), path: '/' },
     ...paths.map((path, index) => ({
       name: path,
       path: `/${paths.slice(0, index + 1).join('/')}`
@@ -231,14 +267,14 @@ const handlePathClick = (path: string) => {
 };
 
 // 文件操作菜单选项
-const fileActions = [
+const fileActions = computed(() => [
   {
-    label: '新建文件',
+    label: $t('page.datamanage.common.newFile'),
     key: 'newFile',
     icon: renderIcon('material-symbols:add')
   },
   {
-    label: '新建文件夹',
+    label: $t('page.datamanage.common.newFolder'),
     key: 'newFolder',
     icon: renderIcon('material-symbols:create-new-folder')
   },
@@ -247,17 +283,17 @@ const fileActions = [
     key: 'd1'
   },
   {
-    label: '下载',
+    label: $t('page.datamanage.common.download'),
     key: 'download',
     icon: renderIcon('material-symbols:download')
   },
   {
-    label: '重命名',
+    label: $t('page.datamanage.common.rename'),
     key: 'rename',
     icon: renderIcon('material-symbols:edit')
   },
   {
-    label: '查看信息',
+    label: $t('page.datamanage.common.viewInfo'),
     key: 'info',
     icon: renderIcon('material-symbols:info')
   },
@@ -266,11 +302,11 @@ const fileActions = [
     key: 'd2'
   },
   {
-    label: '删除',
+    label: $t('page.datamanage.common.delete'),
     key: 'delete',
     icon: renderIcon('material-symbols:delete')
   }
-];
+]);
 
 // 渲染图标的辅助函数
 function renderIcon(icon: string) {
@@ -302,25 +338,25 @@ const handleFileAction = (key: string) => {
 
   switch (key) {
     case 'newFile':
-      console.log('新建文件:', currentContextItem.value);
+      console.log(`${$t('page.datamanage.common.newFile')}:`, currentContextItem.value);
       break;
     case 'newFolder':
-      console.log('新建文件夹:', currentContextItem.value);
+      console.log(`${$t('page.datamanage.common.newFolder')}:`, currentContextItem.value);
       break;
     case 'download':
-      console.log('下载文件:', currentContextItem.value);
+      console.log(`${$t('page.datamanage.common.download')}:`, currentContextItem.value);
       break;
     case 'rename':
-      console.log('重命名文件:', currentContextItem.value);
+      console.log(`${$t('page.datamanage.common.rename')}:`, currentContextItem.value);
       break;
     case 'info':
-      console.log('查看文件信息:', currentContextItem.value);
+      console.log(`${$t('page.datamanage.common.viewInfo')}:`, currentContextItem.value);
       break;
     case 'delete':
-      console.log('删除文件:', currentContextItem.value);
+      console.log(`${$t('page.datamanage.common.delete')}:`, currentContextItem.value);
       break;
     default:
-      console.log('未知操作:', key);
+      console.log(`${$t('page.datamanage.common.unknown')}:`, key);
       break;
   }
   showContextMenu.value = false;
@@ -333,7 +369,12 @@ const handleFileAction = (key: string) => {
       <!-- 顶部工具栏 -->
       <NSpace justify="space-between" align="center" class="mb-4">
         <NSpace>
-          <NInput v-model:value="searchQuery" placeholder="搜索文件..." clearable style="width: 300px">
+          <NInput
+            v-model:value="searchQuery"
+            :placeholder="$t('page.datamanage.common.search')"
+            clearable
+            class="w-300px"
+          >
             <template #prefix>
               <NIcon>
                 <Icon icon="material-symbols:search" />
@@ -355,7 +396,7 @@ const handleFileAction = (key: string) => {
                 <Icon icon="material-symbols:add" />
               </NIcon>
             </template>
-            新建
+            {{ $t('page.datamanage.common.new') }}
           </NButton>
         </NSpace>
       </NSpace>

@@ -488,13 +488,59 @@ declare namespace App {
           };
           creativity: string;
         };
-        userManage: {
+        usermanage: {
           common: {
             userIdentity: string;
+            username: string;
+            password: string;
+            isAdmin: string;
+            finishedNum: string;
+            unfinishedNum: string;
+            createUser: string;
+            editUser: string;
+            deleteUser: string;
+            resetPassword: string;
+            confirmDelete: string;
+            confirmReset: string;
+            searchPlaceholder: string;
+            success: string;
+            fail: string;
+            error: string;
           };
           userIdentity: {
             admin: string;
             ordinaryUser: string;
+          };
+        };
+        datamanage: {
+          common: {
+            root: string;
+            search: string;
+            new: string;
+            newFile: string;
+            newFolder: string;
+            download: string;
+            rename: string;
+            viewInfo: string;
+            delete: string;
+            lastModified: string;
+            size: string;
+            folder: string;
+            file: string;
+            unknown: string;
+          };
+          folders: {
+            remoteSensing: string;
+            year2024: string;
+            year2023: string;
+            beijing: string;
+            shanghai: string;
+            history: string;
+            annotation: string;
+            building: string;
+            road: string;
+            results: string;
+            buildingExtraction: string;
           };
         };
       };

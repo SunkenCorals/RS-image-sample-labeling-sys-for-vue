@@ -1,6 +1,6 @@
 const local: App.I18n.Schema = {
   system: {
-    title: 'RSLNet 智能标注',
+    title: 'RSLabel 智能标注',
     updateTitle: '系统版本更新通知',
     updateContent: '检测到系统有新版本发布，是否立即刷新页面？',
     updateConfirm: '立即刷新',
@@ -245,13 +245,59 @@ const local: App.I18n.Schema = {
       },
       creativity: '创意'
     },
-    userManage: {
+    usermanage: {
       common: {
-        userIdentity: '用户身份'
+        userIdentity: '用户身份',
+        username: '用户名',
+        password: '密码',
+        isAdmin: '管理员',
+        finishedNum: '已完成任务数',
+        unfinishedNum: '未完成任务数',
+        createUser: '创建用户',
+        editUser: '编辑用户',
+        deleteUser: '删除用户',
+        resetPassword: '重置密码',
+        confirmDelete: '确认删除该用户吗？',
+        confirmReset: '确认重置该用户的密码吗？',
+        searchPlaceholder: '请输入',
+        success: '操作成功',
+        fail: '操作失败',
+        error: '加载失败'
       },
       userIdentity: {
         admin: '管理员',
         ordinaryUser: '普通用户'
+      }
+    },
+    datamanage: {
+      common: {
+        root: '根目录',
+        search: '搜索文件...',
+        new: '新建',
+        newFile: '新建文件',
+        newFolder: '新建文件夹',
+        download: '下载',
+        rename: '重命名',
+        viewInfo: '查看信息',
+        delete: '删除',
+        lastModified: '最后修改',
+        size: '大小',
+        folder: '文件夹',
+        file: '文件',
+        unknown: '未知操作'
+      },
+      folders: {
+        remoteSensing: '遥感影像数据',
+        year2024: '2024年数据',
+        year2023: '2023年数据',
+        beijing: '北京地区影像',
+        shanghai: '上海地区影像',
+        history: '历史影像',
+        annotation: '标注结果',
+        building: '建筑物标注',
+        road: '道路标注',
+        results: '处理结果',
+        buildingExtraction: '建筑物提取'
       }
     }
   },

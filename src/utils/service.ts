@@ -1,11 +1,11 @@
 import json5 from 'json5';
 
 /**
- * 创建 API 服务配置
+ * Create backend service config
  *
- * @param env - 读取 .env 配置
+ * @param env import.meta.env
  */
-export function createServiceConfig(env: Env.ImportMeta) {
+export function createServiceConfig(env: ImportMetaEnv) {
   const { VITE_SERVICE_BASE_URL, VITE_OTHER_SERVICE_BASE_URL } = env;
 
   let other = {} as Record<string, string>;
@@ -36,12 +36,12 @@ export function createServiceConfig(env: Env.ImportMeta) {
 }
 
 /**
- * 获取 API 代理的 BaseURL
+ * Get backend service base url
  *
- * @param env - 读取 .env 配置
- * @param isProxy - 是否启用代理
+ * @param env import.meta.env
+ * @param isProxy Whether to use proxy
  */
-export function getServiceBaseURL(env: Env.ImportMeta, isProxy: boolean) {
+export function getServiceBaseURL(env: ImportMetaEnv, isProxy: boolean) {
   const { baseURL, other } = createServiceConfig(env);
 
   const otherBaseURL = {} as Record<string, string>;

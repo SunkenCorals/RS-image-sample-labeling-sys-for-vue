@@ -4,6 +4,7 @@ import { NButton, NCard, NDataTable, NPopconfirm, NTag, useMessage } from 'naive
 import type { DataTableColumns } from 'naive-ui';
 import { useUserStore } from '@/store/modules/auth';
 import UserSearch from '@/views/userManage/modules/user-search.vue';
+import { $t } from '@/locales';
 
 //  获取用户 Store
 const userStore = useUserStore();
@@ -42,13 +43,13 @@ const fetchData = async () => {
     if (response.data) {
       tableData.value = response.data || [];
       total.value = response.total || 0;
-      message.success('数据加载成功');
+      message.success($t('common.updateSuccess'));
     } else {
-      message.error('获取用户列表失败');
+      message.error($t('common.error'));
     }
   } catch (error) {
     console.error('❌ 获取用户列表出错:', error);
-    message.error('获取用户列表出错');
+    message.error($t('common.error'));
   } finally {
     loading.value = false;
   }
@@ -78,57 +79,53 @@ const handleReset = () => {
 //  处理用户编辑
 const editUser = (row: { userid: number; username: string; isadmin: number }) => {
   console.log('编辑用户:', row);
-  message.info(`编辑用户: ${row.username}`);
+  message.info(`${$t('common.edit')}: ${row.username}`);
 };
 
 //  处理用户删除
 const deleteUser = async (user_id: number) => {
   try {
-    // 调用后端删除接口
     await userStore.deleteUser(user_id);
-
-    // 显示删除成功消息
-    message.success(`用户 ${user_id} 删除成功`);
-
-    // 重新获取用户列表，确保页面数据更新
+    message.success($t('common.deleteSuccess'));
     await fetchData();
   } catch (error) {
-    // 处理删除失败情况
     console.error('❌ 删除用户失败:', error);
-    message.error(`删除用户失败: ${error}`);
+    message.error($t('common.error'));
   }
 };
 
 //  定义表格列
 const columns: DataTableColumns<{ userid: number; username: string; isadmin: number }> = [
   { type: 'selection', align: 'center', width: 48 },
-  { key: 'userid', title: '用户ID', align: 'center', width: 60 },
-  { key: 'username', title: '用户名', align: 'center', minWidth: 120 },
+  { key: 'userid', title: 'ID', align: 'center', width: 60 },
+  { key: 'username', title: $t('page.usermanage.common.username'), align: 'center', minWidth: 120 },
   {
     key: 'isadmin',
-    title: '用户类型',
+    title: $t('page.usermanage.common.userIdentity'),
     align: 'center',
     width: 150,
     render: row => (
-      <NTag type={row.isadmin === 1 ? 'success' : 'warning'}>{row.isadmin === 1 ? '管理员' : '普通用户'}</NTag>
+      <NTag type={row.isadmin === 1 ? 'success' : 'warning'}>
+        {row.isadmin === 1 ? $t('page.usermanage.userIdentity.admin') : $t('page.usermanage.userIdentity.ordinaryUser')}
+      </NTag>
     )
   },
   {
     key: 'operate',
-    title: '操作',
+    title: $t('common.action'),
     align: 'center',
     width: 130,
     render: row => (
       <div class="flex-center gap-8px">
         <NButton type="primary" ghost size="small" onClick={() => editUser(row)}>
-          编辑
+          {$t('common.edit')}
         </NButton>
         <NPopconfirm onPositiveClick={() => deleteUser(row.userid)}>
           {{
-            default: () => '确认删除？',
+            default: () => $t('common.confirmDelete'),
             trigger: () => (
               <NButton type="error" ghost size="small">
-                删除
+                {$t('common.delete')}
               </NButton>
             )
           }}
@@ -149,9 +146,9 @@ const handlePageChange = (page: number) => {
   <div class="min-h-screen flex flex-col gap-4">
     <UserSearch @search="handleSearch" @reset="handleReset" />
 
-    <NCard title="用户管理" :bordered="false" size="small">
+    <NCard :title="$t('route.usermanage')" :bordered="false" size="small">
       <template #header-extra>
-        <NButton type="primary" @click="fetchData">刷新数据</NButton>
+        <NButton type="primary" @click="fetchData">{{ $t('common.refresh') }}</NButton>
       </template>
 
       <!-- 让表格撑开页面，而不是自己滚动 -->

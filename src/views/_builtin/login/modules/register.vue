@@ -2,9 +2,9 @@
 import { computed, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useMessage } from 'naive-ui';
-import { $t } from '@/locales';
-import { useFormRules, useNaiveForm } from '@/hooks/common/form';
 import { useUserStore } from '@/store/modules/auth'; // ✅ 直接调用 Pinia Store
+import { useFormRules, useNaiveForm } from '@/hooks/common/form';
+import { $t } from '@/locales';
 
 defineOptions({
   name: 'Register'
