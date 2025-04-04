@@ -169,7 +169,9 @@ const local: App.I18n.Schema = {
     markpage: '标注页面',
     categorymanage: '类别管理',
     servicemanage_alltask: '全部任务',
-    servicemanage_taskpublish: '发布任务'
+    servicemanage_taskpublish: '发布任务',
+    servicemanage_finishedtask: '已完成任务',
+    servicemanage_unfinishedtask: '未完成任务'
   },
   page: {
     login: {

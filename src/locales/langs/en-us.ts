@@ -169,7 +169,9 @@ const local: App.I18n.Schema = {
     markpage: 'Mark Page',
     categorymanage: 'Category Manage',
     servicemanage_alltask: ' All Task',
-    servicemanage_taskpublish: 'Task Publish'
+    servicemanage_taskpublish: 'Task Publish',
+    servicemanage_finishedtask: 'Finished Task',
+    servicemanage_unfinishedtask: ' Unfinish Task'
   },
   page: {
     login: {

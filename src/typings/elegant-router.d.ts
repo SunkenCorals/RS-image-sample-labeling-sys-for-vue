@@ -28,7 +28,9 @@ declare module "@elegant-router/types" {
     "markpage": "/markpage";
     "servicemanage": "/servicemanage";
     "servicemanage_alltask": "/servicemanage/alltask";
+    "servicemanage_finishedtask": "/servicemanage/finishedtask";
     "servicemanage_taskpublish": "/servicemanage/taskpublish";
+    "servicemanage_unfinishedtask": "/servicemanage/unfinishedtask";
     "usermanage": "/usermanage";
   };
 
@@ -98,7 +100,9 @@ declare module "@elegant-router/types" {
     | "home"
     | "markpage"
     | "servicemanage_alltask"
+    | "servicemanage_finishedtask"
     | "servicemanage_taskpublish"
+    | "servicemanage_unfinishedtask"
     | "usermanage"
   >;
 

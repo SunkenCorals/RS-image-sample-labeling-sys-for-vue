@@ -25,6 +25,8 @@ export const views: Record<LastLevelRouteKey, RouteComponent | (() => Promise<Ro
   home: () => import("@/views/home/index.vue"),
   markpage: () => import("@/views/markPage/index.vue"),
   servicemanage_alltask: () => import("@/views/serviceManage/allTask/index.vue"),
+  servicemanage_finishedtask: () => import("@/views/serviceManage/finishedTask/index.vue"),
   servicemanage_taskpublish: () => import("@/views/serviceManage/taskPublish/index.vue"),
+  servicemanage_unfinishedtask: () => import("@/views/serviceManage/unfinishedTask/index.vue"),
   usermanage: () => import("@/views/userManage/index.vue"),
 };

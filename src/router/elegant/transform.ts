@@ -174,7 +174,9 @@ const routeMap: RouteMap = {
   "markpage": "/markpage",
   "servicemanage": "/servicemanage",
   "servicemanage_alltask": "/servicemanage/alltask",
+  "servicemanage_finishedtask": "/servicemanage/finishedtask",
   "servicemanage_taskpublish": "/servicemanage/taskpublish",
+  "servicemanage_unfinishedtask": "/servicemanage/unfinishedtask",
   "usermanage": "/usermanage"
 };
 

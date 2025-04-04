@@ -130,6 +130,15 @@ export const generatedRoutes: GeneratedRoute[] = [
         }
       },
       {
+        name: 'servicemanage_finishedtask',
+        path: '/servicemanage/finishedtask',
+        component: 'view.servicemanage_finishedtask',
+        meta: {
+          title: 'servicemanage_finishedtask',
+          i18nKey: 'route.servicemanage_finishedtask'
+        }
+      },
+      {
         name: 'servicemanage_taskpublish',
         path: '/servicemanage/taskpublish',
         component: 'view.servicemanage_taskpublish',
@@ -137,6 +146,15 @@ export const generatedRoutes: GeneratedRoute[] = [
           title: 'servicemanage_taskpublish',
           i18nKey: 'route.servicemanage_taskpublish',
           order: 1
+        }
+      },
+      {
+        name: 'servicemanage_unfinishedtask',
+        path: '/servicemanage/unfinishedtask',
+        component: 'view.servicemanage_unfinishedtask',
+        meta: {
+          title: 'servicemanage_unfinishedtask',
+          i18nKey: 'route.servicemanage_unfinishedtask'
         }
       }
     ]
