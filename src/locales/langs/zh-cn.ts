@@ -167,7 +167,9 @@ const local: App.I18n.Schema = {
     servicemanage: '任务管理',
     usermanage: '用户管理',
     markpage: '标注页面',
-    categorymanage: '类别管理'
+    categorymanage: '类别管理',
+    servicemanage_alltask: '全部任务',
+    servicemanage_taskpublish: '发布任务'
   },
   page: {
     login: {

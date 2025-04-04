@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="service-manage"></div>
+  <div class="taskPublish"></div>
 </template>
 
 <style scoped></style>

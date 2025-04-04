@@ -27,6 +27,8 @@ declare module "@elegant-router/types" {
     "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?";
     "markpage": "/markpage";
     "servicemanage": "/servicemanage";
+    "servicemanage_alltask": "/servicemanage/alltask";
+    "servicemanage_taskpublish": "/servicemanage/taskpublish";
     "usermanage": "/usermanage";
   };
 
@@ -95,7 +97,8 @@ declare module "@elegant-router/types" {
     | "datamanage"
     | "home"
     | "markpage"
-    | "servicemanage"
+    | "servicemanage_alltask"
+    | "servicemanage_taskpublish"
     | "usermanage"
   >;
 

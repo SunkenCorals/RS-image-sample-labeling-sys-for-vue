@@ -167,7 +167,9 @@ const local: App.I18n.Schema = {
     servicemanage: 'Service Manage',
     usermanage: 'User Manage',
     markpage: 'Mark Page',
-    categorymanage: 'Category Manage'
+    categorymanage: 'Category Manage',
+    servicemanage_alltask: ' All Task',
+    servicemanage_taskpublish: 'Task Publish'
   },
   page: {
     login: {

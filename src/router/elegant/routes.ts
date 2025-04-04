@@ -111,13 +111,35 @@ export const generatedRoutes: GeneratedRoute[] = [
   {
     name: 'servicemanage',
     path: '/servicemanage',
-    component: 'layout.base$view.servicemanage',
+    component: 'layout.base',
     meta: {
       title: 'servicemanage',
       i18nKey: 'route.servicemanage',
       icon: 'line-md:list',
       order: 3
-    }
+    },
+    children: [
+      {
+        name: 'servicemanage_alltask',
+        path: '/servicemanage/alltask',
+        component: 'view.servicemanage_alltask',
+        meta: {
+          title: 'servicemanage_alltask',
+          i18nKey: 'route.servicemanage_alltask',
+          order: 2
+        }
+      },
+      {
+        name: 'servicemanage_taskpublish',
+        path: '/servicemanage/taskpublish',
+        component: 'view.servicemanage_taskpublish',
+        meta: {
+          title: 'servicemanage_taskpublish',
+          i18nKey: 'route.servicemanage_taskpublish',
+          order: 1
+        }
+      }
+    ]
   },
   {
     name: 'usermanage',

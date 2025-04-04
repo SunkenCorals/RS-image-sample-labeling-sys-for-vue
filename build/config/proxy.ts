@@ -7,7 +7,7 @@ import { createServiceConfig } from '../../src/utils/service';
  * @param env - 读取 .env 配置
  * @param enable - 是否启用代理
  */
-export function createViteProxy(env: Env.ImportMeta, enable: boolean) {
+export function createViteProxy(env: ImportMetaEnv, enable: boolean) {
   const isEnableHttpProxy = enable && env.VITE_HTTP_PROXY === 'Y';
 
   if (!isEnableHttpProxy) {
