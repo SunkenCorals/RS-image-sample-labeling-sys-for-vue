@@ -126,7 +126,8 @@ export const generatedRoutes: GeneratedRoute[] = [
         meta: {
           title: 'servicemanage_alltask',
           i18nKey: 'route.servicemanage_alltask',
-          order: 2
+          order: 2,
+          icon: 'fluent:task-list-ltr-24-filled'
         }
       },
       {
@@ -135,7 +136,9 @@ export const generatedRoutes: GeneratedRoute[] = [
         component: 'view.servicemanage_finishedtask',
         meta: {
           title: 'servicemanage_finishedtask',
-          i18nKey: 'route.servicemanage_finishedtask'
+          i18nKey: 'route.servicemanage_finishedtask',
+          order: 4,
+          icon: 'ep:finished'
         }
       },
       {
@@ -145,7 +148,8 @@ export const generatedRoutes: GeneratedRoute[] = [
         meta: {
           title: 'servicemanage_taskpublish',
           i18nKey: 'route.servicemanage_taskpublish',
-          order: 1
+          order: 1,
+          icon: 'basil:add-outline'
         }
       },
       {
@@ -154,7 +158,9 @@ export const generatedRoutes: GeneratedRoute[] = [
         component: 'view.servicemanage_unfinishedtask',
         meta: {
           title: 'servicemanage_unfinishedtask',
-          i18nKey: 'route.servicemanage_unfinishedtask'
+          i18nKey: 'route.servicemanage_unfinishedtask',
+          order: 3,
+          icon: 'hugeicons:task-remove-01'
         }
       }
     ]
