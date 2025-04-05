@@ -273,6 +273,25 @@ const local: App.I18n.Schema = {
         ordinaryUser: '普通用户'
       }
     },
+    serviceManage: {
+      common: {
+        columns: {
+          taskName: '任务名称',
+          taskType: '任务类型',
+          taskDetail: '任务详情',
+          publishTime: '发布时间',
+          deadline: '截止时间',
+          completionRate: '完成率',
+          action: '操作'
+        },
+        buttons: {
+          startMark: '开始标注'
+        },
+        messages: {
+          startMark: '开始标注'
+        }
+      }
+    },
     datamanage: {
       common: {
         root: '根目录',

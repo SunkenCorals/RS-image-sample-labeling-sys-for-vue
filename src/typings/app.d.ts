@@ -543,6 +543,25 @@ declare namespace App {
             buildingExtraction: string;
           };
         };
+        serviceManage: {
+          common: {
+            columns: {
+              taskName: string;
+              taskType: string;
+              taskDetail: string;
+              publishTime: string;
+              deadline: string;
+              completionRate: string;
+              action: string;
+            };
+            buttons: {
+              startMark: string;
+            };
+            messages: {
+              startMark: string;
+            };
+          };
+        };
       };
       form: {
         required: string;

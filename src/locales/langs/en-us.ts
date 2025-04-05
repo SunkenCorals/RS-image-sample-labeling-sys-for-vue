@@ -273,6 +273,25 @@ const local: App.I18n.Schema = {
         ordinaryUser: 'Regular User'
       }
     },
+    serviceManage: {
+      common: {
+        columns: {
+          taskName: 'Task Name',
+          taskType: 'Task Type',
+          taskDetail: 'Task Detail',
+          publishTime: 'Publish Time',
+          deadline: 'Deadline',
+          completionRate: 'Completion Rate',
+          action: 'Action'
+        },
+        buttons: {
+          startMark: 'Start Mark'
+        },
+        messages: {
+          startMark: 'Start Mark'
+        }
+      }
+    },
     datamanage: {
       common: {
         root: 'Root',

@@ -1,7 +1,11 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="taskPublish"></div>
+  <h3>nihao</h3>
 </template>
 
-<style scoped></style>
+<style>
+h3 {
+  color: red;
+}
+</style>
