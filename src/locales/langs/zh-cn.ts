@@ -174,6 +174,13 @@ const local: App.I18n.Schema = {
     servicemanage_unfinishedtask: '未完成任务'
   },
   page: {
+    common: {
+      taskName: '任务名称',
+      taskType: '任务类型',
+      taskDetail: '任务详情',
+      targetDetection: '目标检测',
+      terrainClassification: '地物分类'
+    },
     login: {
       common: {
         loginOrRegister: '登录 / 注册',

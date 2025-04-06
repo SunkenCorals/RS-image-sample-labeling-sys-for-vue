@@ -414,6 +414,13 @@ declare namespace App {
       };
       route: Record<I18nRouteKey, string>;
       page: {
+        common: {
+          taskName: string;
+          taskType: string;
+          taskDetail: string;
+          targetDetection: string;
+          terrainClassification: string;
+        };
         login: {
           common: {
             loginOrRegister: string;

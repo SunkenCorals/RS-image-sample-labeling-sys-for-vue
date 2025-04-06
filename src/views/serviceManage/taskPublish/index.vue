@@ -1,11 +1,13 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import TaskMessage from './modoles/taskMessage.vue';
+import UpTaskData from './modoles/upTaskData.vue';
+</script>
 
 <template>
-  <h3>nihao</h3>
+  <div class="min-h-screen flex flex-col gap-4">
+    <TaskMessage />
+    <UpTaskData />
+  </div>
 </template>
 
-<style>
-h3 {
-  color: red;
-}
-</style>
+<style></style>

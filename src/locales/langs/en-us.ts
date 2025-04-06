@@ -174,6 +174,13 @@ const local: App.I18n.Schema = {
     servicemanage_unfinishedtask: ' Unfinish Task'
   },
   page: {
+    common: {
+      taskName: 'Task Name',
+      taskType: 'Task type',
+      taskDetail: 'Task Detail',
+      targetDetection: 'Target Detection',
+      terrainClassification: 'Target Classification'
+    },
     login: {
       common: {
         loginOrRegister: 'Login / Register',
