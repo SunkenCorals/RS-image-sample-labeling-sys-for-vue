@@ -17,48 +17,56 @@ interface RowData {
 export default defineComponent({
   setup() {
     const message = useMessage();
-    const sendMail = (rowData: RowData) => {
-      message.info($t('page.serviceManage.common.messages.startMark', { name: rowData.taskName }));
-    };
-
     const columns = computed<DataTableColumns<RowData>>(() => {
       return [
         {
           title: $t('page.serviceManage.common.columns.taskName'),
-          key: 'taskName'
+          key: 'taskName',
+          resizable: true
         },
         {
           title: $t('page.serviceManage.common.columns.taskType'),
-          key: 'taskType'
+          key: 'taskType',
+          resizable: true
         },
         {
           title: $t('page.serviceManage.common.columns.taskDetail'),
-          key: 'taskDetail'
+          key: 'taskDetail',
+          resizable: true
         },
         {
           title: $t('page.serviceManage.common.columns.publishTime'),
-          key: 'publishTime'
+          key: 'publishTime',
+          resizable: true
         },
         {
           title: $t('page.serviceManage.common.columns.deadline'),
-          key: 'deadline'
+          key: 'deadline',
+          resizable: true
         },
         {
           title: $t('page.serviceManage.common.columns.completionRate'),
-          key: 'completionRate'
+          key: 'completionRate',
+          resizable: true
         },
         {
           title: $t('page.serviceManage.common.columns.action'),
           key: 'actions',
+          resizable: true,
           render(row: RowData) {
-            return h(
-              NButton,
-              {
-                size: 'small',
-                onClick: () => sendMail(row)
-              },
-              { default: () => $t('page.serviceManage.common.buttons.startMark') }
-            );
+            return h('div', { style: { display: 'flex', gap: '8px' } }, [
+              h(
+                NButton,
+                {
+                  size: 'small',
+                  type: 'error',
+                  onClick: () => {
+                    message.info($t('common.delete', { name: row.taskName }));
+                  }
+                },
+                { default: () => $t('common.delete') }
+              )
+            ]);
           }
         }
       ];

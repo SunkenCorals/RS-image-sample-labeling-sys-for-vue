@@ -420,6 +420,7 @@ declare namespace App {
           taskDetail: string;
           targetDetection: string;
           terrainClassification: string;
+          taskDeadline: string;
         };
         login: {
           common: {

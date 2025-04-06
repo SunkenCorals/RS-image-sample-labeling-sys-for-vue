@@ -6,7 +6,8 @@ import { $t } from '@/locales';
 const taskMessage = ref({
   taskName: '',
   taskType: '',
-  taskDetail: ''
+  taskDetail: '',
+  taskDeadline: undefined
 });
 
 const taskType = computed(() => [
@@ -36,6 +37,11 @@ const taskType = computed(() => [
             :placeholder="$t('page.usermanage.common.searchPlaceholder')"
             clearable
           />
+        </NFormItemGi>
+
+        <!-- 选择时间-->
+        <NFormItemGi span="4" :label="$t('page.common.taskDeadline')" class="pr-24px">
+          <NDatePicker v-model:value="taskMessage.taskDeadline" type="datetime" clearable />
         </NFormItemGi>
 
         <!-- 任务详情 -->

@@ -179,7 +179,8 @@ const local: App.I18n.Schema = {
       taskType: 'Task type',
       taskDetail: 'Task Detail',
       targetDetection: 'Target Detection',
-      terrainClassification: 'Target Classification'
+      terrainClassification: 'Target Classification',
+      taskDeadline: 'Task Deadline'
     },
     login: {
       common: {
