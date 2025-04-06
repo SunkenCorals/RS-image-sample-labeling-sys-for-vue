@@ -1,8 +1,21 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { Icon } from '@iconify/vue';
+</script>
 
 <template>
   <NCard>
-    <h3>这是一个示例组件。</h3>
+    <NUpload multiple directory-dnd action="https://httpbin.org/post" :max="100">
+      <NUploadDragger>
+        <NGrid cols="1" justify="center" align="center">
+          <NGridItem>
+            <Icon icon="streamline:upload-box-1-solid" style="font-size: 32px" />
+          </NGridItem>
+          <NGridItem>
+            <NText style="font-size: 16px">点击或者拖动文件到该区域来上传</NText>
+          </NGridItem>
+        </NGrid>
+      </NUploadDragger>
+    </NUpload>
   </NCard>
 </template>
 

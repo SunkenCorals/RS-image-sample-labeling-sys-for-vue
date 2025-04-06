@@ -4,7 +4,7 @@ import UpTaskData from './modoles/upTaskData.vue';
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col gap-4">
+  <div>
     <TaskMessage />
     <UpTaskData />
   </div>
