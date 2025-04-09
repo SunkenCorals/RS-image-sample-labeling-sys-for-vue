@@ -180,7 +180,7 @@ const local: App.I18n.Schema = {
       taskDetail: '任务详情',
       targetDetection: '目标检测',
       terrainClassification: '地物分类',
-      taskDeadline: '任务截止时间'
+      taskDeadline: '截止时间'
     },
     login: {
       common: {
