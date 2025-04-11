@@ -171,7 +171,8 @@ const local: App.I18n.Schema = {
     servicemanage_alltask: '全部任务',
     servicemanage_taskpublish: '发布任务',
     servicemanage_finishedtask: '已完成任务',
-    servicemanage_unfinishedtask: '未完成任务'
+    servicemanage_unfinishedtask: '未完成任务',
+    personaltasks: '个人任务'
   },
   page: {
     common: {

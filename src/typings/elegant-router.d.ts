@@ -26,6 +26,7 @@ declare module "@elegant-router/types" {
     "iframe-page": "/iframe-page/:url";
     "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?";
     "markpage": "/markpage";
+    "personaltasks": "/personaltasks";
     "servicemanage": "/servicemanage";
     "servicemanage_alltask": "/servicemanage/alltask";
     "servicemanage_finishedtask": "/servicemanage/finishedtask";
@@ -72,6 +73,7 @@ declare module "@elegant-router/types" {
     | "iframe-page"
     | "login"
     | "markpage"
+    | "personaltasks"
     | "servicemanage"
     | "usermanage"
   >;
@@ -99,6 +101,7 @@ declare module "@elegant-router/types" {
     | "datamanage"
     | "home"
     | "markpage"
+    | "personaltasks"
     | "servicemanage_alltask"
     | "servicemanage_finishedtask"
     | "servicemanage_taskpublish"

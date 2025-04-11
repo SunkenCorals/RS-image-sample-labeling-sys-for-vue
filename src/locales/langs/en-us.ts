@@ -171,7 +171,8 @@ const local: App.I18n.Schema = {
     servicemanage_alltask: ' All Task',
     servicemanage_taskpublish: 'Task Publish',
     servicemanage_finishedtask: 'Finished Task',
-    servicemanage_unfinishedtask: ' Unfinish Task'
+    servicemanage_unfinishedtask: ' Unfinish Task',
+    personaltasks: 'Personal Tasks'
   },
   page: {
     common: {

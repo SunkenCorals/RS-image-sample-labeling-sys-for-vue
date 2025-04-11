@@ -105,6 +105,17 @@ export const generatedRoutes: GeneratedRoute[] = [
       title: 'markpage',
       i18nKey: 'route.markpage',
       icon: 'line-md:monitor-screenshot',
+      order: 3
+    }
+  },
+  {
+    name: 'personaltasks',
+    path: '/personaltasks',
+    component: 'layout.base$view.personaltasks',
+    meta: {
+      title: 'personaltasks',
+      i18nKey: 'route.personaltasks',
+      icon: 'fluent-mdl2:task-group-mirrored',
       order: 2
     }
   },
@@ -116,7 +127,7 @@ export const generatedRoutes: GeneratedRoute[] = [
       title: 'servicemanage',
       i18nKey: 'route.servicemanage',
       icon: 'line-md:list',
-      order: 3
+      order: 4
     },
     children: [
       {
@@ -173,7 +184,7 @@ export const generatedRoutes: GeneratedRoute[] = [
       title: 'usermanage',
       i18nKey: 'route.usermanage',
       icon: 'line-md:account',
-      order: 4
+      order: 5
     }
   }
 ];
