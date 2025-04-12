@@ -1,5 +1,6 @@
 <script lang="ts">
 import { computed, defineComponent, h } from 'vue';
+import { useRouter } from 'vue-router';
 import type { DataTableColumns } from 'naive-ui';
 import { NButton, useMessage } from 'naive-ui';
 import { useTaskStore } from '@/store/modules/task';
@@ -22,8 +23,12 @@ interface RowData {
 export default defineComponent({
   setup() {
     const message = useMessage();
+    const router = useRouter();
+
     const StartMark = (rowData: RowData) => {
       message.info($t('page.serviceManage.common.messages.startMark', { name: rowData.taskname }));
+      // 跳转到标注页面，并传递任务 ID
+      router.push({ name: 'markpage', params: { taskId: rowData.taskid } });
     };
 
     const columns = computed<DataTableColumns<RowData>>(() => {
@@ -51,12 +56,45 @@ export default defineComponent({
         {
           title: '状态',
           key: 'status',
-          resizable: true
+          resizable: true,
+          render: (row: RowData) => {
+            let color;
+            let text;
+            switch (Number(row.status)) {
+              case 0:
+                text = '审核中';
+                color = 'processing';
+                break;
+              case 1:
+                text = '审核通过';
+                color = 'success';
+                break;
+              case 2:
+                text = '审核未通过';
+                color = 'error';
+                break;
+              case 3:
+                text = '未提交';
+                color = '#BDBDBD';
+                break;
+              default:
+                break;
+            }
+            // 使用 text 和 color 变量创建一个带有样式的文本节点
+            if (text && color) {
+              return h('span', { style: { color } }, text);
+            }
+            return null;
+          }
         },
         {
           title: '审核反馈',
           key: 'auditfeedback',
-          resizable: true
+          resizable: true,
+          render(row: RowData) {
+            // 若 auditfeedback 为空，设置默认值
+            return row.auditfeedback || '无';
+          }
         },
         {
           title: $t('page.serviceManage.common.columns.action'),
