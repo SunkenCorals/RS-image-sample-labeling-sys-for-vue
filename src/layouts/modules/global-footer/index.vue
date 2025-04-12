@@ -12,4 +12,8 @@ defineOptions({
   </DarkModeContainer>
 </template>
 
-<style scoped></style>
+<style scoped>
+.h-full {
+  height: 20px;
+}
+</style>

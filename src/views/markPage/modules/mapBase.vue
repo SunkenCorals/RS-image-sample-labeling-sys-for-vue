@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { notification } from 'antd';
+import { message, notification } from 'antd';
 import { Map, View } from 'ol';
 import { transform } from 'ol/proj';
 import XYZ from 'ol/source/XYZ';
 import { Tile as TileLayer } from 'ol/layer';
 import { OSM } from 'ol/source';
-// import ScaleLine from 'ol/control/ScaleLine';
+import ScaleLine from 'ol/control/ScaleLine';
 import 'ol-layerswitcher/dist/ol-layerswitcher.css';
 import 'ol/ol.css';
 import LayerSwitcher from 'ol-layerswitcher';
@@ -30,7 +30,7 @@ const openNotification = (placement: any) => {
 const initMap = () => {
   try {
     if (!mapRef.value) {
-      console.error('地图容器元素未找到，请检查 DOM 结构。');
+      message.error('地图容器元素未找到，请检查 DOM 结构。');
       return;
     }
     const tianDiRSLayer = new TileLayer({
@@ -58,26 +58,25 @@ const initMap = () => {
       target: mapRef.value
     });
 
-    // const scaleLineControl = new ScaleLine({
-    //   units: 'metric',
-    //   className: 'ol-scale-line',
-    // });
+    const scaleLineControl = new ScaleLine({
+      units: 'metric',
+      className: 'ol-scale-line'
+    });
 
-    // 添加自定义类名
+    // 初始化图层切换器
     const layerSwitcher = new LayerSwitcher({
       activationMode: 'mouseover'
     });
 
     map.addControl(layerSwitcher);
-    // map.addControl(scaleLineControl);
+    map.addControl(scaleLineControl);
 
     props.setMap(map);
   } catch (error) {
-    console.error('地图初始化失败:', error);
+    message.error(error);
   }
 };
 onMounted(() => {
-  // 传入合法的值
   openNotification('topLeft');
   initMap();
 });

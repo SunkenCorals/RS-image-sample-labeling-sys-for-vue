@@ -1,17 +1,20 @@
 <script lang="ts" setup>
-import Mapbase from '@/views/markPage/modules/mapbase.vue';
+import { message } from 'antd';
+import MapBase from '@/views/markPage/modules/mapBase.vue';
+import PerationMap from '@/views/markPage/modules/perationMap.vue';
 
 // 定义 setMap 方法
-const handleSetMap = (map: any) => {
+const handleSetMap = () => {
   try {
-    console.log('地图实例:', map);
+    message.success('地图加载成功');
     // 这里可以添加更多处理逻辑
   } catch (error) {
-    console.error('处理地图实例时出错:', error);
+    message.error(error);
   }
 };
 </script>
 
 <template>
-  <Mapbase :set-map="handleSetMap" />
+  <PerationMap />
+  <MapBase :set-map="handleSetMap" />
 </template>
