@@ -5,7 +5,7 @@ import { Map, View } from 'ol';
 import { transform } from 'ol/proj';
 import XYZ from 'ol/source/XYZ';
 import { Tile as TileLayer } from 'ol/layer';
-import { OSM } from 'ol/source';
+// import { OSM } from 'ol/source';
 import ScaleLine from 'ol/control/ScaleLine';
 import 'ol-layerswitcher/dist/ol-layerswitcher.css';
 import 'ol/ol.css';
@@ -40,12 +40,12 @@ const initMap = () => {
     });
     (tianDiRSLayer as any).set('title', '天地图影像图');
 
-    const OSMLayer = new TileLayer({
-      source: new OSM({
-        url: 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png'
-      })
-    });
-    (OSMLayer as any).set('title', 'OSM资源图');
+    // const OSMLayer = new TileLayer({
+    //   source: new OSM({
+    //     url: 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    //   })
+    // });
+    // (OSMLayer as any).set('title', 'OSM资源图');
 
     const map = new Map({
       view: new View({
@@ -54,7 +54,7 @@ const initMap = () => {
         minZoom: 2,
         maxZoom: 20
       }),
-      layers: [tianDiRSLayer, OSMLayer],
+      layers: [tianDiRSLayer],
       target: mapRef.value
     });
 
@@ -83,12 +83,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <div id="map-container" ref="mapRef" class="map-container"></div>
+  <div ref="mapRef" class="map-container"></div>
 </template>
 
 <style scoped>
 .map-container {
+  width: 100%;
   height: 100%;
+  flex: 1;
   color: black;
 }
 </style>

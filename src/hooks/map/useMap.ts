@@ -8,21 +8,19 @@ import { reqGetGeoServerInfo } from '@/service/api/serviceManage';
 import { reqStartMark } from '@/service/api/task';
 import { Decrypt } from '@/utils/utils';
 
+interface TaskInfo {
+  taskName: string;
+  taskType: string;
+  mapserver: string;
+  markGeoJsonArr?: any[];
+  [key: string]: any;
+}
+
 interface MapExtent {
   maxx: number;
   maxy: number;
   minx: number;
   miny: number;
-}
-
-interface TaskData {
-  taskname: string;
-  mapserver?: string;
-}
-
-interface TaskInfo {
-  data: TaskData[];
-  markGeoJsonArr?: any[];
 }
 
 interface GeoServerResponse {
@@ -39,7 +37,7 @@ interface GeoServerResponse {
 export function useMap() {
   const mapRef = ref<any>(null);
   const typeList = ref({});
-  const taskInfo = ref<TaskInfo>({ data: [{ taskname: '无' }] });
+  const taskInfo = ref<TaskInfo[]>([]);
   const markGeoJsonArr = ref<any[]>([]);
   const mapExtent = ref<MapExtent | null>(null);
 
@@ -60,7 +58,10 @@ export function useMap() {
     const taskResult = await reqStartMark({ taskid: taskId });
     if (taskResult && taskResult.data) {
       taskInfo.value = taskResult.data;
+      console.log('taskInfo111', taskInfo);
+      // 目前是管理员登录，获取所有 mapserver 默认展示第一个
       mapserver = taskResult.data[0].mapserver;
+      console.log('mapserver', taskResult.data);
       markGeoJsonArr.value = taskResult.data.markGeoJsonArr || [];
     }
 
@@ -121,7 +122,7 @@ export function useMap() {
       });
     }
   });
-
+  console.log('taskInfo2222', taskInfo);
   return {
     typeList,
     taskInfo,

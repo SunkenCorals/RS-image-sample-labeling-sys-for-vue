@@ -25,16 +25,9 @@ export default defineComponent({
     const message = useMessage();
     const router = useRouter();
 
-    const StartMark = (rowData: RowData) => {
-      const taskId = rowData.taskid;
-      try {
-        window.sessionStorage.setItem('taskId', taskId.toString());
-        // 跳转到标注页面，并传递任务 ID
-        router.push({ name: 'markpage', params: { taskId: rowData.taskid } });
-      } catch (error) {
-        console.error(error);
-        message.error('底图服务加载失败或不存在');
-      }
+    const handleStartMark = (rowData: any) => {
+      window.sessionStorage.setItem('taskId', rowData.taskid);
+      router.push({ name: 'markpage' });
     };
 
     const columns = computed<DataTableColumns<RowData>>(() => {
@@ -113,7 +106,7 @@ export default defineComponent({
                 {
                   size: 'small',
                   type: 'primary',
-                  onClick: () => StartMark(row)
+                  onClick: () => handleStartMark(row)
                 },
                 { default: () => $t('page.serviceManage.common.buttons.startMark') }
               ),

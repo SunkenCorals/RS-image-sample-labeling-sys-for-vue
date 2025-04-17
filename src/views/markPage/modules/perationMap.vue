@@ -1,11 +1,33 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue';
 import { NButton, NCard, NForm, NFormItemGi, NInput, NSelect } from 'naive-ui';
 import { $t } from '@/locales';
 
-const taskInfo = {
-  taskName: '任务1',
-  taskType: '地物分类'
-};
+interface TaskInfo {
+  taskName: string;
+  taskType: string;
+  markGeoJsonArr?: any[];
+  [key: string]: any;
+}
+
+const props = defineProps<{
+  taskInfo: TaskInfo[];
+}>();
+
+const currentTaskInfo = ref<TaskInfo>({
+  taskName: '',
+  taskType: ''
+});
+
+watch(
+  () => props.taskInfo,
+  newVal => {
+    if (newVal && newVal.length > 0) {
+      currentTaskInfo.value = newVal[0];
+    }
+  },
+  { immediate: true, deep: true }
+);
 
 const trainTimes = '';
 
@@ -22,15 +44,15 @@ const inferInfo = {
     <NForm label-placement="left" :label-width="80">
       <NGrid cols="12" responsive="screen" item-responsive class="form-row" justify="end">
         <NFormItemGi span="2" :label="$t('page.common.taskName')" class="pr-24px" path="taskName">
-          ：{{ taskInfo.taskName }}
+          ：{{ currentTaskInfo?.taskname || '-' }}
         </NFormItemGi>
 
         <NFormItemGi span="2" :label="$t('page.common.taskType')" class="pr-24px">
-          ：{{ taskInfo.taskType }}
+          ：{{ currentTaskInfo?.type || '-' }}
         </NFormItemGi>
 
         <NFormItemGi span="2" label="当前图层:">
-          <NSelect placeholder="请选择图层" clearable />
+          <NSelect value="无" placeholder="请选择图层" clearable />
         </NFormItemGi>
 
         <NFormItemGi span="2" label="标注:">
@@ -140,7 +162,7 @@ const inferInfo = {
 }
 
 .pr-24px {
-  font-size: 17px;
+  font-size: 14px;
   font-weight: bold;
 }
 
