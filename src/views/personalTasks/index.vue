@@ -26,9 +26,15 @@ export default defineComponent({
     const router = useRouter();
 
     const StartMark = (rowData: RowData) => {
-      message.info($t('page.serviceManage.common.messages.startMark', { name: rowData.taskname }));
-      // 跳转到标注页面，并传递任务 ID
-      router.push({ name: 'markpage', params: { taskId: rowData.taskid } });
+      const taskId = rowData.taskid;
+      try {
+        window.sessionStorage.setItem('taskId', taskId.toString());
+        // 跳转到标注页面，并传递任务 ID
+        router.push({ name: 'markpage', params: { taskId: rowData.taskid } });
+      } catch (error) {
+        console.error(error);
+        message.error('底图服务加载失败或不存在');
+      }
     };
 
     const columns = computed<DataTableColumns<RowData>>(() => {

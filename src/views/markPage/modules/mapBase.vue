@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { message, notification } from 'antd';
+import { message, notification } from 'ant-design-vue';
 import { Map, View } from 'ol';
 import { transform } from 'ol/proj';
 import XYZ from 'ol/source/XYZ';
@@ -73,7 +73,7 @@ const initMap = () => {
 
     props.setMap(map);
   } catch (error) {
-    message.error(error);
+    message.error(error instanceof Error ? error.message : String(error));
   }
 };
 onMounted(() => {

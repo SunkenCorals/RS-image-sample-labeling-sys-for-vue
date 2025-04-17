@@ -11,7 +11,6 @@ export function createViteProxy(env: ImportMetaEnv, enable: boolean) {
   const isEnableHttpProxy = enable && env.VITE_HTTP_PROXY === 'Y';
 
   if (!isEnableHttpProxy) {
-    console.warn('⚠️ Vite 代理未启用');
     return undefined;
   }
 
@@ -25,6 +24,13 @@ export function createViteProxy(env: ImportMetaEnv, enable: boolean) {
     rewrite: path => path.replace(/^\/wegismarkapi/, '') // ✅ 让 `/wegismarkapi/user/login` 变成 `/user/login`
   };
 
+  // // ✅ `/api3` 代理到 GeoServer
+  // proxy['/api3'] = {
+  //   target: 'http://localhost:8080/geoserver',
+  //   changeOrigin: true,
+  //   rewrite: path => path.replace(/^\/api3/, '') // ✅ 让 `/api3/workspaces/...` 变成 `/workspaces/...`
+  // };
+
   // 其他 API 代理
   other.forEach(item => {
     proxy[item.proxyPattern] = {
@@ -34,7 +40,6 @@ export function createViteProxy(env: ImportMetaEnv, enable: boolean) {
     };
   });
 
-  console.log('✅ 解析后的 Vite 代理:', proxy); // 🔥 确保代理解析正确
   return proxy;
 }
 // function createProxyItem(item: App.Service.ServiceConfigItem) {
