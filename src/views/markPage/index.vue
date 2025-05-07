@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
-import { NButton, NCard, NForm, NFormItemGi, NInput, NSelect } from 'naive-ui';
+import { NButton, NCard, NForm, NFormItemGi, NSelect } from 'naive-ui';
 import { message } from 'ant-design-vue';
+import axios from 'axios';
 import VectorSource from 'ol/source/Vector';
 import Draw, { createBox, createRegularPolygon } from 'ol/interaction/Draw';
 import Modify from 'ol/interaction/Modify';
@@ -13,6 +14,7 @@ import VectorLayer from 'ol/layer/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import Style from 'ol/style/Style';
 import Fill from 'ol/style/Fill';
+import Circle from 'ol/style/Circle';
 import Stroke from 'ol/style/Stroke';
 import { Select } from 'ol/interaction';
 import { useMap } from '@/hooks/map/useMap';
@@ -52,18 +54,159 @@ const drawOptions = [
 ];
 
 let shapeDraw: Draw;
-let select: Select;
+let select: Select | null = null;
 const featuresList = ref<Feature<Geometry>[]>([]);
 
-const trainTimes = ref('');
+// const trainTimes = ref('');
 const currentUser = ref('admin');
 
-const inferInfo = {
-  minimumObjectSize: '',
-  maximumHoleSize: '',
-  smoothBoundaryDegree: '',
-  modeFilterRange: ''
+// const inferInfo = {
+//   minimumObjectSize: '',
+//   maximumHoleSize: '',
+//   smoothBoundaryDegree: '',
+//   modeFilterRange: ''
+// };
+
+const modelOptions = [{ label: 'SAM', value: 'SAM' }];
+const modelSelect = ref();
+
+const positivePointSource = ref<VectorSource<Feature<Geometry>>>(new VectorSource<Feature<Geometry>>());
+const negativePointSource = ref<VectorSource<Feature<Geometry>>>(new VectorSource<Feature<Geometry>>());
+const samResultSource = new VectorSource<Feature<Geometry>>();
+const positivePointLayer = ref<VectorLayer<VectorSource> | null>(null);
+const negativePointLayer = ref<VectorLayer<VectorSource> | null>(null);
+const samResultLayer = ref<VectorLayer<VectorSource> | null>(null);
+let pointDraw: Draw | null = null;
+
+// 初始化点图层
+const initPointLayers = () => {
+  // 蓝色点图层
+  positivePointLayer.value = new VectorLayer({
+    source: positivePointSource.value as VectorSource<Feature<Geometry>>,
+    style: new Style({
+      image: new Circle({
+        radius: 5,
+        fill: new Fill({
+          color: 'blue'
+        })
+      })
+    }),
+    zIndex: 1000 // 设置更高的 z-index
+  });
+
+  // 红色点图层
+  negativePointLayer.value = new VectorLayer({
+    source: negativePointSource.value as VectorSource<Feature<Geometry>>,
+    style: new Style({
+      image: new Circle({
+        radius: 5,
+        fill: new Fill({
+          color: 'red'
+        })
+      })
+    }),
+    zIndex: 1000 // 设置更高的 z-index
+  });
+
+  // sam结果图层
+  samResultLayer.value = new VectorLayer({
+    source: samResultSource,
+    style: new Style({
+      fill: new Fill({
+        color: 'rgba(255,255, 0, 0.3)' // 增加填充颜色的不透明度
+      }),
+      stroke: new Stroke({
+        color: 'yellow',
+        width: 3
+      })
+    }),
+    zIndex: 1000 // 确保图层在最上层
+  });
+
+  // 添加到地图
+  mapRef.value?.addLayer(positivePointLayer.value);
+  mapRef.value?.addLayer(negativePointLayer.value);
+  mapRef.value?.addLayer(samResultLayer.value);
 };
+
+// 添加监听器，只触发一次绘制即可执行分割
+positivePointSource.value.on('addfeature', async () => {
+  await sendToSAM();
+});
+negativePointSource.value.on('addfeature', async () => {
+  await sendToSAM();
+});
+
+// 定义一个函数用于移除地图中的所有 Draw 交互
+const removeAllDrawInteractions = () => {
+  if (!mapRef.value) return;
+  const interactions = mapRef.value.getInteractions().getArray();
+  interactions.forEach((interaction: any) => {
+    if (interaction instanceof Draw) {
+      mapRef.value.removeInteraction(interaction);
+    }
+  });
+};
+
+// 添加正样本点绘制交互
+const addPositivePointDrawInteraction = () => {
+  // 先清除现有的交互
+  removeAllDrawInteractions();
+  // 创建新的点绘制交互，根据颜色确定使用哪个source
+  pointDraw = new Draw({
+    source: positivePointSource.value as VectorSource<Feature<Geometry>>,
+    type: 'Point'
+  });
+  // 将交互添加到地图
+  mapRef.value?.addInteraction(pointDraw);
+};
+
+// 添加负样本点绘制交互
+const addNegativePointDrawInteraction = () => {
+  // 先清除现有的交互
+  removeAllDrawInteractions();
+  // 创建新的点绘制交互，根据颜色确定使用哪个source
+  pointDraw = new Draw({
+    source: negativePointSource.value as VectorSource<Feature<Geometry>>,
+    type: 'Point'
+  });
+  // 将交互添加到地图
+  mapRef.value?.addInteraction(pointDraw);
+};
+
+// 发送点数据到后端
+async function sendToSAM() {
+  try {
+    const geojson = new GeoJSON();
+    // 保持后端数据使用 EPSG:3857
+    const posFeatures = geojson.writeFeaturesObject(positivePointSource.value.getFeatures(), {
+      featureProjection: 'EPSG:3857',
+      dataProjection: 'EPSG:4326'
+    });
+    const negFeatures = geojson.writeFeaturesObject(negativePointSource.value.getFeatures(), {
+      featureProjection: 'EPSG:3857',
+      dataProjection: 'EPSG:4326'
+    });
+
+    const res = await axios.post('http://localhost:5000/sam-segment', {
+      positive_points: posFeatures,
+      negative_points: negFeatures
+    });
+
+    // 清除旧分割结果
+    samResultSource.clear();
+
+    // 将后端返回的结果转换为 EPSG:4326 用于前端展示
+    const resultFeatures = geojson.readFeatures(res.data.result_geojson, {
+      dataProjection: 'EPSG:4326',
+      featureProjection: 'EPSG:4326' // 转换为 EPSG:4326 用于前端展示
+    });
+    samResultSource.addFeatures(resultFeatures);
+  } catch (error) {
+    console.error('Error in sendToSAM:', error);
+    message.error('分割处理失败，请重试');
+  }
+}
 
 // 遍历生成不同目标图层
 const generateMarkLayer = computed(() => {
@@ -82,7 +225,6 @@ const generateMarkLayer = computed(() => {
       }
     }
   }
-  console.log('totalTypeIdArr.length', totalTypeIdArr.length);
   let vectorLayerArr: VectorLayer<VectorSource>[] = [];
   if (totalTypeIdArr.length) {
     // 只对当前用户生成标注图形
@@ -93,10 +235,8 @@ const generateMarkLayer = computed(() => {
         })
       });
       typeSource.set('typeid', typeId);
-      console.log(' markGeoJsonArr.value', markGeoJsonArr.value);
       for (const item of markGeoJsonArr.value) {
         if (typeId === item.typeId) {
-          console.log('进入const item of markGeoJsonArr', item.markGeoJson);
           const existedFeatures = new GeoJSON().readFeatures(item.markGeoJson);
           const map = existedFeatures.map(existedFeaturesItem => {
             existedFeaturesItem.set('markId', item.markId);
@@ -132,7 +272,6 @@ const generateMarkLayer = computed(() => {
 const currentSource = (typeid: string) => {
   for (const layer of generateMarkLayer.value) {
     if (layer.getSource()?.get('typeid') === typeid) {
-      console.log('获取当前标注的数据源layer.getSource()', layer.getSource());
       return layer.getSource();
     }
   }
@@ -143,7 +282,6 @@ const currentSource = (typeid: string) => {
 const currentLayer = (typeid: string) => {
   for (const layer of generateMarkLayer.value) {
     if (layer.get('typeid') === typeid) {
-      console.log('获取当前标注的图层layer', layer);
       // 添加绘制的交互
       select = new Select({
         layers: [layer]
@@ -169,16 +307,6 @@ const getLayerOptions = () => {
       value: type.typeId
     }))
   ];
-};
-
-// 定义一个函数用于移除地图中的所有 Draw 交互
-const removeAllDrawInteractions = () => {
-  const interactions = mapRef.value.getInteractions().getArray();
-  interactions.forEach((interaction: any) => {
-    if (interaction instanceof Draw) {
-      mapRef.value.removeInteraction(interaction);
-    }
-  });
 };
 
 // 添加绘制交互
@@ -247,7 +375,6 @@ const onLayerSelect = () => {
   if (key !== '') {
     const type = typeList.value.filter(item => item.typeId === key);
     if (type.length > 0) {
-      console.log('给toolbarState赋值');
       toolbarState.value = {
         color: type[0].typeColor || '',
         drawState: false,
@@ -273,6 +400,10 @@ const onLayerSelect = () => {
 
 // 删除要素函数
 const deleteFeature = () => {
+  if (!select) {
+    message.warn('未初始化选择工具！');
+    return;
+  }
   const selectFeasuresList = select.getFeatures().getArray();
   if (selectFeasuresList.length > 0 && toolbarState.value.currentLayer) {
     try {
@@ -308,29 +439,6 @@ const undo = () => {
   }
 };
 
-// // 回滚
-// const undo = () => {
-//   try {
-//     const features = toolbarState.value.currentLayer.getSource().getFeatures();
-//     const feature = features.pop();
-//     if (feature) {
-//       toolbarState.value.currentLayer.getSource().removeFeature(feature);
-//       featuresList.value.push(feature);
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     message.warning('请选择图层');
-//   }
-// };
-//
-// // 恢复
-// const recover = () => {
-//   const feature = featuresList.value.pop();
-//   if (feature) {
-//     toolbarState.value.currentLayer.getSource()?.addFeature(feature);
-//   }
-// };
-//
 // const getTaskId = computed(() => {
 //   const TASKID = window.sessionStorage.getItem('taskId');
 //   return Decrypt(TASKID);
@@ -486,6 +594,9 @@ const undo = () => {
 // };
 
 watch(mapRef, () => {
+  // 初始化点图层
+  initPointLayers();
+
   // 遍历设定方案动态添加图层 用户标注此处不生效，审核时生效
   for (const vector of generateMarkLayer.value) {
     vector.setZIndex(99);
@@ -553,50 +664,79 @@ watch(shapeSelect, () => {
         <NCard :bordered="false" size="small" class="card-wrapper">
           <NForm label-placement="left" :label-width="80">
             <NGrid cols="12" responsive="screen" item-responsive class="form-row" justify="end">
-              <!-- 模型训练 -->
-              <NFormItemGi span="4" label="模型选择:">
-                <div class="model-training-container">
-                  <NSelect placeholder="请选择模型" clearable class="model-select" />
-                  <NInput v-model:value="trainTimes" type="text" placeholder="训练次数" class="model-input" />
-                  <NButton type="primary" class="button">调用辅助</NButton>
-                </div>
+              <NFormItemGi span="2" label="模型选择:">
+                <NSelect
+                  v-model:value="modelSelect"
+                  placeholder="请选择模型"
+                  :options="modelOptions"
+                  clearable
+                  class="model-select"
+                />
               </NFormItemGi>
-
-              <!-- 模型推理 -->
-              <NFormItemGi span="8" label="推理模型:">
-                <div class="model-inference-container">
-                  <NSelect placeholder="请选择模型" clearable class="model-select" />
-                  <NInput
-                    v-model:value="inferInfo.minimumObjectSize"
-                    type="text"
-                    placeholder="最小物体大小"
-                    class="model-input"
-                  />
-                  <NInput
-                    v-model:value="inferInfo.maximumHoleSize"
-                    type="text"
-                    placeholder="最大孔洞大小"
-                    class="model-input"
-                  />
-                  <NInput
-                    v-model:value="inferInfo.smoothBoundaryDegree"
-                    type="text"
-                    placeholder="边界平滑程度"
-                    class="model-input"
-                  />
-                  <NInput
-                    v-model:value="inferInfo.modeFilterRange"
-                    type="text"
-                    placeholder="众数滤波范围"
-                    class="model-input"
-                  />
-                  <NButton type="primary" class="button">模型推理</NButton>
+              <NFormItemGi v-if="modelSelect" span="5" label="点击选择">
+                <div class="button-container">
+                  <NButton type="primary" @click="addPositivePointDrawInteraction()">+</NButton>
+                  <NButton type="error" @click="addNegativePointDrawInteraction()">-</NButton>
+                  <NButton type="primary">画框</NButton>
+                  <NButton type="primary">撤销</NButton>
                 </div>
               </NFormItemGi>
             </NGrid>
           </NForm>
         </NCard>
       </div>
+      <!--      <div v-if="!isCollapsed" class="content">-->
+      <!--        <NCard :bordered="false" size="small" class="card-wrapper">-->
+      <!--          <NForm label-placement="left" :label-width="80">-->
+      <!--            <NGrid cols="12" responsive="screen" item-responsive class="form-row" justify="end">-->
+      <!--              &lt;!&ndash; 模型训练 &ndash;&gt;-->
+      <!--              <NFormItemGi span="4" label="模型选择:">-->
+      <!--                <div class="model-training-container">-->
+      <!--                  <NSelect-->
+      <!--                    placeholder="请选择模型"-->
+      <!--                    :options="modelOptions"-->
+      <!--                    clearable-->
+      <!--                    class="model-select" />-->
+      <!--                  <NInput v-model:value="trainTimes" type="text" placeholder="训练次数" class="model-input" />-->
+      <!--                  <NButton type="primary" class="button">调用辅助</NButton>-->
+      <!--                </div>-->
+      <!--              </NFormItemGi>-->
+
+      <!--              &lt;!&ndash; 模型推理 &ndash;&gt;-->
+      <!--              <NFormItemGi span="8" label="推理模型:">-->
+      <!--                <div class="model-inference-container">-->
+      <!--                  <NSelect placeholder="请选择模型" clearable class="model-select" />-->
+      <!--                  <NInput-->
+      <!--                    v-model:value="inferInfo.minimumObjectSize"-->
+      <!--                    type="text"-->
+      <!--                    placeholder="最小物体大小"-->
+      <!--                    class="model-input"-->
+      <!--                  />-->
+      <!--                  <NInput-->
+      <!--                    v-model:value="inferInfo.maximumHoleSize"-->
+      <!--                    type="text"-->
+      <!--                    placeholder="最大孔洞大小"-->
+      <!--                    class="model-input"-->
+      <!--                  />-->
+      <!--                  <NInput-->
+      <!--                    v-model:value="inferInfo.smoothBoundaryDegree"-->
+      <!--                    type="text"-->
+      <!--                    placeholder="边界平滑程度"-->
+      <!--                    class="model-input"-->
+      <!--                  />-->
+      <!--                  <NInput-->
+      <!--                    v-model:value="inferInfo.modeFilterRange"-->
+      <!--                    type="text"-->
+      <!--                    placeholder="众数滤波范围"-->
+      <!--                    class="model-input"-->
+      <!--                  />-->
+      <!--                  <NButton type="primary" class="button">模型推理</NButton>-->
+      <!--                </div>-->
+      <!--              </NFormItemGi>-->
+      <!--            </NGrid>-->
+      <!--          </NForm>-->
+      <!--        </NCard>-->
+      <!--      </div>-->
     </div>
   </div>
 </template>

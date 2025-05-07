@@ -36,7 +36,6 @@ interface GeoServerResponse {
 }
 
 export function useMap() {
-  console.log('进入useMap');
   const mapRef = ref<any>(null);
   const typeList = ref([{ typeId: 'None', typeName: '无', typeColor: '#000000' }]);
   const taskInfo = ref<TaskInfo[]>([]);
@@ -48,7 +47,6 @@ export function useMap() {
   };
 
   onMounted(async () => {
-    console.log('进入useMap的onMounted');
     let mapserver: string = '';
     let baseLayer: any;
     let zuoshangExtent: number[] = [];
